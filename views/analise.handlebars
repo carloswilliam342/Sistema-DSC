@@ -1,0 +1,143 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="/dashboard">DSC</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/sobre">Sobre o DSC</a></li>
+                <li class="nav-item"><a class="nav-link" href="/como-funciona">Como funciona</a></li>
+                <li class="nav-item"><a class="nav-link" href="/recursos">Recursos</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Contato</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="{{usuario.imagemPerfil}}" alt="Profile picture" class="rounded-circle me-2" width="30">
+                        <span>{{usuario.nome}}</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Perfil</a></li>
+                        <li><a class="dropdown-item" href="/discursos/favoritos"><i class="fas fa-heart me-2"></i>Meus Favoritos</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>Sair</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-lg-4">
+      <h4 class="mb-4">Refinar Análises</h4>
+      <ul class="list-group mb-5">
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Introdução ao DSC
+          <span class="badge bg-primary rounded-pill">30 mins</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Técnicas de Extração de Discursos
+          <span class="badge bg-primary rounded-pill">30 mins</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Prática: Criação de Discursos Coletivos
+          <span class="badge bg-primary rounded-pill">30 mins</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Discussões em Grupo sobre Resultados
+          <span class="badge bg-primary rounded-pill">30 mins</span>
+        </li>
+      </ul>
+
+      <h4 class="mb-4">Prática: Identificar Discursos</h4>
+      <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-center bg-info text-white">
+          Aplicações do DSC na Pesquisa
+          <span class="badge bg-primary rounded-pill">30 mins</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center bg-warning text-dark">
+          Ética e Cuidados no Uso do DSC
+          <span class="badge bg-primary rounded-pill">30 mins</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center bg-danger text-white">
+          Identificação de Ideias Centrais
+          <span class="badge bg-primary rounded-pill">30 mins</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center bg-success text-white">
+          Classificação de Expressões-Chave
+          <span class="badge bg-primary rounded-pill">30 mins</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary text-white">
+          Criação de um Discurso-Síntese
+          <span class="badge bg-primary rounded-pill">30 mins</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center bg-light text-dark">
+          Revisão de Categorizações
+          <span class="badge bg-primary rounded-pill">30 mins</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center bg-primary text-white">
+          Ética no DSC
+          <span class="badge bg-primary rounded-pill">30 mins</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center bg-dark text-white">
+          Aplicações do DSC na Pesquisa
+          <span class="badge bg-primary rounded-pill">30 mins</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center bg-danger text-white">
+          Discussões em Grupo sobre Resultados
+          <span class="badge bg-primary rounded-pill">30 mins</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Formulário -->
+    <div class="col-lg-8">
+      <h2 class="mb-4">Planejar Nova Análise</h2>
+      <p class="text-muted">
+        Os usuários devem detalhar o objetivo da sessão, os temas a serem explorados ou o tipo de discursos que serão analisados.
+      </p>
+      <form action="/analise" method="POST" class="p-4 bg-light rounded shadow-sm">
+        <div class="mb-3">
+          <label for="titulo" class="form-label">Título do estudo</label>
+          <input type="text" id="titulo" name="titulo" class="form-control" placeholder="Digite o título do estudo" required>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="data_inicio" class="form-label">Data de Início</label>
+            <input type="datetime-local" id="data_inicio" name="data_inicio" class="form-control" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="data_termino" class="form-label">Data de Término</label>
+            <input type="datetime-local" id="data_termino" name="data_termino" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="plataforma" class="form-label">Plataforma de Discussão</label>
+          <input type="text" id="plataforma" name="plataforma" class="form-control" placeholder="Digite a plataforma" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label">E-mail</label>
+          <input type="email" id="email" name="email" class="form-control" placeholder="exemplo@dominio.com" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="descricao" class="form-label">Descrição do estudo</label>
+          <textarea id="descricao" name="descricao" class="form-control" rows="4" placeholder="Descreva o objetivo do estudo" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Salvar Análise</button>
+      </form>
+    </div>
+  </div>
+</div>

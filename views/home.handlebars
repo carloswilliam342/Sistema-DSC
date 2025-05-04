@@ -1,0 +1,448 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light shadow-sm navbar-transparent">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="#">DSC</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/sobre">Sobre o DSC</a></li>
+                <li class="nav-item"><a class="nav-link" href="/como-funciona">Como funciona</a></li>
+                <li class="nav-item"><a class="nav-link" href="/recursos">Recursos</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Contato</a></li>
+            </ul>
+            {{#if usuario}}
+            <!-- Usuário logado: mostra foto e nome -->
+            <div class="dropdown ms-lg-3">
+                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="{{usuario.imagemPerfil}}" alt="Profile picture" class="rounded-circle me-2" width="30">
+                    <span>{{usuario.nome}}</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Perfil</a></li>
+                    <li><a class="dropdown-item" href="/discursos/favoritos"><i class="fas fa-heart me-2"></i>Meus Favoritos</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>Sair</a></li>
+                </ul>
+            </div>
+            {{else}}
+            <!-- Usuário não logado: mostra botões de login/registro -->
+            <div class="d-flex ms-lg-3">
+                <a href="/login" class="btn btn-outline-primary me-2">Login</a>
+                <a href="/registro" class="btn btn-primary">Registrar-se</a>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+</nav>
+{{!-- Estilos personalizados --}}
+
+<style>
+    .navbar-transparent {
+        background-color: transparent !important; /* Fundo transparente */
+        position: absolute; /* Fixa a navbar no topo */
+        width: 100%; /* Ocupa toda a largura */
+        z-index: 10; /* Garante que fique acima de outros elementos */
+    }
+
+    .navbar-transparent .nav-link {
+        color: white !important; /* Links brancos */
+    }
+
+    .navbar-transparent .navbar-brand {
+        color: white !important; /* Marca branca */
+    }
+
+    .navbar-transparent .btn-outline-primary {
+        color: white !important; /* Texto branco no botão */
+        border-color: white !important; /* Borda branca */
+    }
+
+    .navbar-transparent .btn-outline-primary:hover {
+        background-color: white !important; /* Fundo branco ao passar o mouse */
+        color: #007bff !important; /* Texto azul */
+    }
+
+    .navbar-transparent .btn-primary {
+        background-color: white !important; /* Fundo branco */
+        color: #007bff !important; /* Texto azul */
+        border: none !important; /* Remove a borda */
+    }
+
+    .navbar-transparent .btn-primary:hover {
+        background-color: #007bff !important; /* Fundo azul ao passar o mouse */
+        color: white !important; /* Texto branco */
+    }
+
+     .card-equal {
+        height: 100%; /* Garante que todos os cards tenham a mesma altura */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; /* Distribui o conteúdo de forma uniforme */
+        text-align: center;
+    }
+
+    .card-equal img {
+        height: 50px; /* Define um tamanho fixo para as imagens */
+        object-fit: contain; /* Garante que as imagens sejam proporcionais */
+    }
+
+    .card-equal h5 {
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+
+    .card-equal p {
+        font-size: 0.9rem;
+        color: #6c757d; /* Cor de texto secundária */
+    }
+    
+</style>
+{{!-- Layout principal --}}
+
+
+<main class="container-fluid p-0">
+    {{!-- Seção Hero --}}
+    <section class="hero text-white text-center d-flex align-items-center" style="background-color: #3ab0a2; padding: 60px 0;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 text-start">
+                    <h1 class="fw-bold">Transforme dados em discursos coletivos com o <span class="text-primary">DSC@IFMA</span></h1>
+                    <p>A solução ideal para análise de pesquisas qualitativas</p>
+                    <div class="mt-4">
+                        <a href="/sobre" class="btn btn-light me-2">Saiba mais</a>
+                        <a href="/registro" class="btn btn-outline-light">Comece agora</a>
+                    </div>
+                </div>
+                <div class="col-md-6 text-end">
+                    <img src="/images/student.png" alt="Estudante" class="img-fluid" style="max-height: 500px;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{!-- Seção Objetivo Geral --}}
+    <section class="text-center py-5">
+        <h2 class="fw-bold">Objetivo geral</h2>
+        <p>Conheça o Discurso do Sujeito Coletivo e utilize o DSC@IFMA para potencializar suas pesquisas</p>
+        <a href="/como-funciona" class="btn btn-primary">Leia mais</a>
+    </section>
+
+    {{!-- Seção Funcionalidades --}}
+    <section class="py-5 bg-light text-center">
+        <h3 class="fw-bold">Potencialize suas <span class="text-success">Pesquisas</span>.</h3>
+        <p>Dê voz ao coletivo e transforme narrativas individuais em discursos poderosos.</p>
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card p-4 h-100 card-equal">
+                        <img src="/icons/data.png" class="mb-3 img-responsive mx-auto text-center" width="50" alt="Processamento de dados">
+                        <h5>Processamento de Dados</h5>
+                        <p>Organize e processe dados qualitativos com eficiência.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card p-4 h-100 card-equal">
+                        <img src="/icons/research.png" class="mb-3 img-responsive mx-auto text-center" width="50" alt="Cadastro de pesquisas">
+                        <h5>Cadastro de Pesquisas</h5>
+                        <p>Cadastre pesquisas, perguntas e entrevistados.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card p-4 h-100 card-equal">
+                        <img src="/icons/results.png" class="mb-3 img-responsive mx-auto text-center" width="50" alt="Produtos finais">
+                        <h5>Produtos Finais</h5>
+                        <p>Visualize discursos gerados e seus relatórios.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{!-- Seção Sobre --}}
+    <section class="py-5 text-center">
+        <h3>O que é o <span class="text-primary">DSC?</span></h3>
+        <p>O Discurso do Sujeito Coletivo é um método de processamento de questões abertas em pesquisas de opinião ou representação social. Ele foi desenvolvido no ano 2000 na Universidade de São Paulo por Fernando Lefevre e  Ana Maria Cavalcanti Lefevre e vem sendo usado desde essa época, em todo tipo de pesquisa em que esteja presente um tema e populações  que o representam  na forma de narrações coletivas  expressando uma dada representação e redigidas na primeira pessoa do singular</p>
+    </section>
+     <img src="/images/dsc-image1.png" class="img-fluid rounded mx-auto d-block"  alt="Imagem representando o DSC"  style="max-height: 300px";>
+        </section>
+
+        <section class="container my-5">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h3 class="text-primary">Tudo o que você precisa para transformar dados em discursos significativos, você encontra no <span class="text-success">DSC@IFMA</span></h3>
+                    <p>O software DSC@IFMA oferece uma solução completa para gerenciar pesquisas qualitativas, desde o cadastro de perguntas e entrevistados até a geração de discursos do sujeito coletivo com quantificações precisas, tudo em um sistema intuitivo e eficiente.</p>
+                    <a href="/sobre" class="btn btn-link">Saiba mais sobre o DSC</a>
+                </div>
+                <div class="col-md-6 text-end">
+                    <img src="/images/dsc-image2.png" class="img-fluid" alt="Pesquisa qualitativa" style="max-height: 300px";>
+                </div>
+            </div>
+        </section>
+
+        <section class="container text-center my-5">
+            <h2>Nossas <span class="text-primary">Funcionalidades</span></h2>
+            <p>Uma interface projetada para pesquisas colaborativas</p>
+        </section>
+
+        <section class="container my-5">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <img src="/images/teamwork.png" class="img-fluid" alt="Trabalho em equipe" style="max-height: 300px";>
+                </div>
+                <div class="col-md-6">
+                    <h3 class="text-primary">O  <span class="text-success">DSC@IFMA</span> facilita o trabalho em equipe ao transformar respostas individuais em discursos coletivos com clareza e eficiência</h3>
+                   <div class="d-flex align-items-start mb-3">
+                        <img src="/images/icon1.png" alt="Ícone 1" class="me-3" style="width: 40px;">
+                        <p><strong>Gestão intuitiva de dados:</strong> Cadastre pesquisas, perguntas e participantes de forma simples e organizada.</p>
+                   </div>
+
+                   <div class="d-flex align-items-start mb-3">
+                        <img src="/images/icon2.png" alt="Ícone 2" class="me-3" style="width: 40px;">
+                        <p><strong>Processamento visual e interativo:</strong> Veja todas as etapas do processamento do DSC em quadros detalhados e conectados.</p>
+                   </div>
+
+                   <div class="d-flex align-items-start">
+                        <img src="/images/icon3.png" alt="Ícone 3" class="me-3" style="width: 40px;">
+                        <p><strong>Resultados claros:</strong> Acesse discursos coletivos e suas quantificações em relatórios prontos para análise.</p>
+                   </div>
+
+                </div>
+            </div>
+        </section>
+
+  <div class="container mt-5">
+        <!-- Primeira Seção -->
+        <div class="row align-items-center mb-5">
+            <div class="col-md-6">
+                <h3><span style="color: #38B6FF;">Ferramentas</span> para Pesquisadores e Estudantes</h3>
+                <p>O DSC@IFMA oferece um conjunto dinâmico de ferramentas para facilitar a análise de discursos coletivos, permitindo que pesquisadores transformem dados em insights com precisão.</p>
+            </div>
+            <div class="col-md-6 text-end">
+                <img src="/images/ferramentas.png" alt="Pesquisadores e Estudantes" class="img-fluid rounded" style="max-height: 250px">
+            </div>
+        </div>
+
+        <!-- Segunda Seção -->
+        <div class="row align-items-center mb-5">
+            <div class="col-md-6 text-start">
+                <img src="/images/questionario.png" alt="Criação e gerenciamento de questionários" class="img-fluid rounded" style="max-height: 300px">
+            </div>
+            <div class="col-md-6">
+                <h3>Criação e <span style="color: #38B6FF;">gerenciamento de questionários</span></h3>
+                <p>Desenvolva questionários personalizados e colete respostas de forma intuitiva.</p>
+                <h5 style="color: #38B6FF;">Processamento automático</h5>
+                <p>O sistema organiza e sintetiza as respostas em discursos coletivos prontos para análise.</p>
+                <h5 style="color: #38B6FF;">Análise visual e relatórios</h5>
+                <p>Gere gráficos e relatórios que traduzem as opiniões coletivas em informações práticas.</p>
+            </div>
+        </div>
+
+        <!-- Terceira Seção -->
+        <div class="row align-items-center mb-5">
+            <div class="col-md-6">
+                <h3><span style="color: #38B6FF;">Gestão de Coleta</span> e Análise de Dados</h3>
+                <p>O DSC@IFMA oferece ferramentas para gerenciar a coleta de discursos, analisar dados e sintetizar narrativas coletivas. Professores podem visualizar rapidamente as respostas dos alunos e gerar discursos coletivos com base em padrões identificados.</p>
+            </div>
+            <div class="col-md-6 text-end">
+                <img src="/images/analise-dados.jpg" alt="Gestão de Coleta e Análise de Dados" class="img-fluid rounded" style="max-height: 250px">
+            </div>
+        </div>
+
+        <!-- Quarta Seção -->
+        <div class="row align-items-center mb-5">
+            <div class="col-md-6 text-start">
+                <img src="/images/segmentacao.png" alt="Discussões por Segmentação" class="img-fluid rounded" style="max-height: 250px">
+            </div>
+            <div class="col-md-6">
+                <h3>Discussões por <span style="color: #38B6FF;">Segmentação</span></h3>
+                <p>Com o DSC@IFMA, professores podem revisar discursos individuais antes de consolidá-los no coletivo. Segmentações permitem análises mais detalhadas e interações específicas com grupos ou participantes.</p>
+            </div>
+    </div>
+</div>
+
+<div class="container my-5 p-4 rounded" style="background-color: rgba(173, 216, 230, 0.3);">
+    <h2 class="text-center fw-bold">Explore discursos coletivos</h2>
+    <p class="text-center">Visualize e analise discursos coletivos organizados por categorias.</p>
+
+    <!-- Sessão de Categorias -->
+    <div class="row g-4">
+        <!-- Primeira linha de categorias -->
+        <div class="col-12">
+            <h4><i class="bi bi-folder"></i> Escolha uma categoria</h4>
+            <div class="d-flex flex-wrap gap-2">
+                <a href="/discursos/categoria/Educação" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #FF5733;">Educação</a>
+                <a href="/discursos/categoria/Sustentabilidade" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #E67E22;">Sustentabilidade</a>
+                <a href="/discursos/categoria/Inovação Social" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #9B59B6;">Inovação Social</a>
+                <a href="/discursos/categoria/Saúde" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #2ECC71;">Saúde</a>
+                <a href="/discursos/categoria/Vulnerabilidades" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #F1C40F;">Vulnerabilidades</a>
+                <a href="/discursos/categoria/Direitos Humanos" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #3498DB;">Direitos Humanos</a>
+                <a href="/discursos/categoria/Política" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #1ABC9C;">Política</a>
+                <a href="/discursos/categoria/DSC" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #3498DB;">DSC</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Botão "VER TODAS" para a primeira seção de categorias -->
+<div class="container text-end mt-2">
+    <a href="/discursos" class="text-primary fw-bold text-decoration-none">VER TODAS →</a>
+</div>
+
+<div class="container my-5 p-4 rounded" style="background-color: rgba(173, 216, 230, 0.3);">
+    <!-- Segunda linha de categorias -->
+    <div class="row g-4">
+        <div class="col-12">
+            <h4><i class="bi bi-folder"></i> Escolha uma categoria</h4>
+            <div class="d-flex flex-wrap gap-2">
+                <a href="/discursos/categoria/Participação pública" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #FF5733;">Participação Pública</a>
+                <a href="/discursos/categoria/Vulnerabilidade Urbana" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #E67E22;">Vulnerabilidade Urbana</a>
+                <a href="/discursos/categoria/Tecnologia & Sociedade" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #9B59B6;">Tecnologia & Sociedade</a>
+                <a href="/discursos/categoria/Tecnologia" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #9B59B6;">Tecnologia</a>
+                <a href="/discursos/categoria/Ética e Justiça" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #2ECC71;">Ética e Justiça</a>
+                <a href="/discursos/categoria/Saúde mental" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #F1C40F;">Saúde Mental</a>
+                <a href="/discursos/categoria/Empreendedorismo" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #3498DB;">Empreendedorismo</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Botão "VER TODAS" para a segunda seção de categorias -->
+<div class="container text-end mt-2">
+    <a href="/discursos" class="text-primary fw-bold text-decoration-none">VER TODAS →</a>
+</div>
+
+<div class="container my-5 p-4 rounded" style="background-color: rgba(173, 216, 230, 0.3);">
+    <!-- Terceira linha de categorias -->
+    <div class="row g-4">
+        <div class="col-12">
+            <h4><i class="bi bi-folder"></i> Escolha uma categoria</h4>
+            <div class="d-flex flex-wrap gap-2">
+                <a href="/discursos/categoria/Segurança Pública" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #FF5733;">Segurança Pública</a>
+                <a href="/discursos/categoria/diversidade" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #E67E22;">Diversidade</a>
+                <a href="/discursos/categoria/Violência e direitos" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #9B59B6;">Violência e Direitos</a>
+                <a href="/discursos/categoria/Educação & Trabalho" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #2ECC71;">Educação & Trabalho</a>
+                <a href="/discursos/categoria/UX e Tecnologia" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #F1C40F;">UX e Tecnologia</a>
+                <a href="/discursos/categoria/Direitos Trabalhistas" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #3498DB;">Direitos Trabalhistas</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Botão "VER TODAS" para a terceira seção de categorias -->
+<div class="container text-end mt-2">
+    <a href="/discursos" class="text-primary fw-bold text-decoration-none">VER TODAS →</a>
+</div>
+
+<div class="container my-5">
+    <!-- Seção de Depoimentos -->
+    <div class="row align-items-center">
+        <div class="col-md-6">
+            <h2 class="text-primary fw-bold">O Que Estão Dizendo?</h2>
+            <p>
+                O DSC@IFMA já ajudou milhares de professores e pesquisadores a transformar opiniões em dados claros e objetivos. Muitos estudantes e educadores relataram grandes avanços em seus projetos utilizando essa ferramenta inovadora.
+            </p>
+            <p> E você? Como o DSC impactou sua pesquisa ou sala de aula? Compartilhe sua experiência conosco! </p>
+            {{!-- Botão para enviar depoimento (disponível para todos os usuários autenticados) --}}
+            {{#if usuario}}
+            <a href="/depoimentos/enviar" class="btn btn-outline-success">Enviar Depoimento</a>
+            {{/if}}
+
+            {{!-- Botão para pesquisadores --}}
+            {{#if (eq usuario.tipoUsuario "PESQUISADOR")}}
+            <a href="/depoimentos" class="btn btn-outline-primary">Ver Depoimentos</a>
+            {{/if}}
+        </div>
+        <div class="col-md-6 position-relative">
+            <img src="/images/imagem-de-depoimento.png" class="img-fluid rounded shadow" alt="Pessoa dando depoimento" style="max-height: 450px;">
+            <div class="position-absolute bg-white p-3 shadow rounded" style="bottom: 10%; left: 10%; max-width: 80%;">
+                <p class="mb-1">"O DSC mudou completamente a forma como entendemos as opiniões coletivas. É como se cada palavra contribuísse para uma visão mais completa e humanizada."</p>
+                <strong>Maria Fernanda</strong>
+                <div class="text-warning">★★★★★</div>
+                <small class="text-muted">12 reviews de Yelp</small>
+            </div>
+            <button class="btn btn-light position-absolute top-50 translate-middle-y end-0 me-2 shadow-sm">
+                <i class="bi bi-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Seção de Notícias -->
+<div class="container my-5">
+    <h2 class="text-center fw-bold">Notícias e Recursos Recentes</h2>
+    <p class="text-center">Veja projetos que utilizaram o DSC</p>
+
+    <div class="row g-4">
+        <!-- Notícia principal -->
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm">
+                <img src="images/noticia-principal.png" class="card-img-top" alt="Pesquisadores em reunião" style="max-height: 300px; max-width: 500px;">
+                <div class="card-body">
+                    <span class="badge bg-success">NEWS</span>
+                    <h5 class="card-title">Pesquisadores destacam eficácia do DSC em estudos sociais.</h5>
+                    <p class="text-muted small">Class, launched less than a year ago by Blackboar co-founder Michael Chasen, integrates exclusively...</p>
+                    <a href="/discursos/categoria/dsc" class="text-primary fw-bold text-decoration-none">Ler mais</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Outras notícias -->
+        <div class="col-md-6">
+            <div class="d-flex flex-column gap-3">
+                <div class="d-flex">
+                    <img src="images/noticia2.png" class="rounded" width="100" alt="Imagem notícia">
+                    <div class="ms-3">
+                        <h6 class="mb-1">Pesquisadores destacam eficácia do DSC em estudos sociais.</h6>
+                        <p class="small text-muted">Class Technologies Inc, the company that created Class...</p>
+                    </div>
+                </div>
+                <div class="d-flex">
+                    <img src="images/noticia3.png" class="rounded" width="100" alt="Imagem notícia">
+                    <div class="ms-3">
+                        <h6 class="mb-1">Nova versão do DSC@IFMA permite mais integração com análise de dados</h6>
+                        <p class="small text-muted">Zoom was never created to be a consumer product...</p>
+                    </div>
+                </div>
+                <div class="d-flex">
+                    <img src="images/noticia4.png" class="rounded" width="100" alt="Imagem notícia">
+                    <div class="ms-3">
+                        <h6 class="mb-1">Estudantes compartilham resultados surpreendentes ao usar o DSC.</h6>
+                        <p class="small text-muted">This year, investors have reaped big financial returns...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Rodapé -->
+<footer class="bg-dark text-white text-center py-4">
+    <div class="container">
+        <h4 class="fw-bold">DSC</h4>
+        <p class="text-secondary">Software de Pesquisa</p>
+        <p>Fique por dentro das últimas novidades do DSC e descubra como ele pode transformar sua pesquisa</p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="#" class="text-white text-decoration-none">Política de Privacidade</a>
+            <span>|</span>
+            <a href="#" class="text-white text-decoration-none">Termos & Condições</a>
+        </div>
+        <p class="mt-3 small text-secondary">&copy; 2024 DSC@IFMA Inc.</p>
+    </div>
+</footer>
+
+
+
+
+
+</main>
+
+{{!-- Footer --}}
+
+

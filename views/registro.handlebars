@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+    }
+    .registro-container {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+    }
+    .image-container {
+      position: relative;
+      flex: 50%;
+      height: 100vh;
+      overflow: hidden;
+      padding: 20px;
+    }
+    .image-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 20px;
+    }
+    .text-overlay {
+      position: absolute;
+      bottom: 10%;
+      left: 10%;
+      color: white;
+      font-size: 1.5rem;
+      font-weight: bold;
+      width: 80%;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    }
+    .text-overlay p {
+      font-size: 1rem;
+      font-weight: normal;
+      margin-top: 10px;
+    }
+    .form-container {
+      flex: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .tabs button {
+      background-color: #E3F7F6;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 0 5px;
+    }
+    .tabs button.active {
+      background-color: #3CBEC4;
+      color: white;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      font-size: 16px;
+    }
+    .password-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .password-container input {
+      padding-right: 40px;
+    }
+    .password-container img {
+      position: absolute;
+      right: 15px;
+      cursor: pointer;
+      width: 20px;
+    }
+    button[type="submit"] {
+      background-color: #3CBEC4;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 20px;
+      width: 100%;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    p {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+    p a {
+      color: #3CBEC4;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row registro-container">
+
+      <!-- Coluna da Imagem (50%) -->
+      <div class="col-md-6 image-container">
+        <img src="images/imagem-registro.png" alt="Imagem de Registro">
+        <div class="text-overlay">
+          <h2>Junte-se a uma comunidade de pesquisadores que transformam dados qualitativos em representações coletivas</h2>
+          <p>Crie sua conta para acessar recursos, ferramentas e tutoriais sobre o DSC</p>
+        </div>
+      </div>
+
+      <!-- Coluna do Formulário de Registro (50%) -->
+      <div class="col-md-6 form-container">
+        <div class="card">
+          <div class="tabs">
+            <button class="active">Registre-se</button>
+            <button onclick="window.location.href='/login'">Login</button>
+          </div>
+
+          <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+
+          {{#if error_msg}}
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{error_msg}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+          {{/if}}
+
+          {{#if success_msg}}
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{success_msg}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+          {{/if}}
+
+          <form action="/registro" method="POST" enctype="multipart/form-data">
+            <label for="email">Endereço de e-mail</label>
+            <input type="email" id="email" name="email" placeholder="Digite seu endereço de e-mail" required>
+
+            <label for="nome">Nome de usuário</label>
+            <input type="text" id="nome" name="nome" placeholder="Digite seu nome de usuário" required>
+
+            <label for="senha">Senha</label>
+            <div class="password-container">
+              <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required>
+              <img src="images/eye-icon.png" alt="Mostrar senha" onclick="togglePassword()">
+            </div>
+
+            <label for="tipoUsuario">Tipo de Usuário</label>
+            <select id="tipoUsuario" name="tipoUsuario" required>
+              <option value="ESTUDANTE">Estudante</option>
+              <option value="PESQUISADOR">Pesquisador</option>
+            </select>
+            <div class="p-2"></div>
+            <label for="imagem">Foto de perfil</label>
+              <input 
+                type="file" 
+                id="imagem" 
+                name="imagem" 
+                accept="image/*"
+                required
+                style="
+                  border: 1px solid #ddd;
+                  padding: 8px;
+                  border-radius: 20px;
+                  margin: 10px 0;
+                "
+            >
+
+            <button type="submit">Registrar</button>
+          </form>
+
+          <p>Já tem uma conta? <a href="/login">Faça login</a></p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function togglePassword() {
+      var senha = document.getElementById("senha");
+      if (senha.type === "password") {
+        senha.type = "text";
+      } else {
+        senha.type = "password";
+      }
+    }
+  </script>
+</body>
+</html>

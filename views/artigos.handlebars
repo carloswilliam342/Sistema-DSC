@@ -1,0 +1,140 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<link rel="stylesheet" href="/css/artigos.css">
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="/dashboard">DSC</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/sobre">Sobre o DSC</a></li>
+                <li class="nav-item"><a class="nav-link" href="/como-funciona">Como funciona</a></li>
+                <li class="nav-item"><a class="nav-link" href="/recursos">Recursos</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Contato</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="{{usuario.imagemPerfil}}" alt="Profile picture" class="rounded-circle me-2" width="30">
+                        <span>{{usuario.nome}}</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Perfil</a></li>
+                        <li><a class="dropdown-item" href="/discursos/favoritos"><i class="fas fa-heart me-2"></i>Meus Favoritos</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>Sair</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <img id="mainImage" src="images/imagem-artigos.png" class="main-image" alt="Imagem principal">
+    
+   <div class="d-flex flex-wrap justify-content-start p-2">
+        <button class="category-btn" data-category="introducao" aria-label="Introdução">Introdução</button>
+        <button class="category-btn col-12 col-md-auto" data-category="coleta" aria-label="Coleta de falas">Coleta de falas</button>
+        <button class="category-btn col-12 col-md-auto" data-category="analise" aria-label="Análise e categorias">Análise e categorias</button>
+        <button class="category-btn col-12 col-md-auto active" data-category="geracao" aria-label="Geração de discursos">Geração de discursos</button>
+    </div>
+    
+    <div class="review-card" id="review-section">
+        <!-- Avaliações serão inseridas aqui via JavaScript -->
+    </div>
+    
+    <div class="article-section">
+        <img id="articleImage" src="images/imagem-artigos.png" alt="Imagem do artigo">
+        <h5>GRATUITO</h5>
+        <a href="/discursos/geracao" class="btn btn-primary">Acessar agora</a>
+    </div>
+    
+    <!-- Mova a seção de compartilhamento para cá -->
+    <div class="share-section p-4">
+        <h5>Compartilhar este recurso:</h5>
+        <a href="#"><img src="images/facebook.png" alt="facebook icon" class="rounded-circle" width="30"></a>
+        <a href="#"><img src="images/twitter.jpg" alt="twitter icon" class="rounded-circle" width="30"></a>
+        <a href="#"><img src="images/linkedin.png" alt="linkedin icon" class="rounded-circle" width="30"></a>
+    </div>
+</div>
+
+<div style="clear: both;"></div>
+
+ <!-- Artigos Relevantes sobre o DSC -->
+    <section class="mt-5">
+        <h2 class="p-2">Artigos Relevantes sobre o DSC</h2>
+        <div class="row">
+            {{#each artigosRelevantes}}
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4"> <!-- 4 por linha no desktop, 2 no tablet, 1 no mobile -->
+                <div class="card h-100 shadow-sm">
+                    <img src="{{#if this.imagem}}{{this.imagem}}{{else}}/uploads/imagens-discursos/default.png{{/if}}" 
+                        class="card-img-top p-3" 
+                        alt="Imagem do Artigo" 
+                        style="max-height: 150px; object-fit: contain;">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">{{this.titulo}}</h5>
+                        <a href="/discursos/{{this.id}}" class="btn btn-primary mt-3">Acessar material</a>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </section>
+
+    <!-- Transforme dados qualitativos -->
+    <section class="mt-5 p-4 bg-light rounded">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h2>Transforme dados qualitativos em discursos significativos com o DSC</h2>
+                <p>Com o DSC, você pode organizar, interpretar e representar dados qualitativos de forma clara e objetiva.</p>
+                <a href="/sobre" class="btn btn-outline-primary">Saiba mais sobre o DSC</a>
+            </div>
+            <div class="col-md-6">
+                <img src="images/transforme-dados.png" alt="Transforme dados" class="img-fluid rounded">
+            </div>
+        </div>
+    </section>
+
+    <!-- Ferramentas e Cursos para Aprender o DSC -->
+    <section class="mt-5">
+        <h2 class="p-2">Ferramentas e Cursos para Aprender o DSC</h2>
+        <div class="row">
+            {{#each ferramentasCursos}}
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4"> <!-- 4 por linha no desktop, 2 no tablet, 1 no mobile -->
+                <div class="card h-100 shadow-sm">
+                    <img src="{{#if this.imagem}}{{this.imagem}}{{else}}/uploads/imagens-discursos/default.png{{/if}}" 
+                         class="card-img-top p-3" 
+                         alt="Imagem do Curso" 
+                         style="max-height: 150px; object-fit: contain;">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">{{this.titulo}}</h5>
+                        <p class="card-text text-muted">{{truncate this.conteudo 150}}</p>
+                        <a href="/discursos/{{this.id}}" class="btn btn-primary mt-3">Acessar agora</a>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </section>
+</div>
+
+ <!-- Rodapé -->
+    <footer class="bg-dark text-light py-4">
+        <div class="container text-center">
+            <p class="fw-bold">DSC - Software de Pesquisa</p>
+            <p>Fique por dentro das últimas novidades do DSC e descubra como ele pode transformar sua pesquisa.</p>
+            <small>Política de Privacidade | Termos & Condições</small>
+            <p class="mt-2">&copy; 2024 DSC@IFMA, Inc.</p>
+        </div>
+    </footer>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/js/artigos.js"></script>
+
+

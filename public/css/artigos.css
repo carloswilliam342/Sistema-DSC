@@ -1,0 +1,85 @@
+.category-btn {
+    background-color: #f0f0f0;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-right: 5px;
+    border-radius: 5px;
+}
+.category-btn.active {
+    background-color: #2CA6E0;
+    color: white;
+}
+.review-card {
+    background-color: #f0f8ff;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    width: 40%;
+    float: left;
+}
+.main-image {
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+    object-fit: cover;
+}
+.article-section {
+    float: right;
+    width: 30%;
+    text-align: center;
+}
+.article-section img {
+    width: 80%;
+    height: auto;
+}
+.share-section {
+    text-align: right;
+    margin-top: 20px;
+    float: right; /* Alinha a seção à direita */
+    width: 30%; /* Ajuste conforme necessário */
+    clear: both; /* Garante que ela fique abaixo de elementos flutuantes */ 
+}
+.card-img-top {
+    width: 100%; /* Garante que a imagem ocupe toda a largura do card */
+    height: auto; /* Mantém a proporção da imagem */
+    max-height: 150px; /* Define uma altura máxima */
+    object-fit: contain; /* Ajusta a imagem para caber no espaço sem distorção */
+}
+
+.card {
+    border: none; /* Remove bordas extras */
+    border-radius: 10px; /* Bordas arredondadas */
+    overflow: hidden; /* Garante que o conteúdo não ultrapasse o card */
+}
+
+.card-body {
+    padding: 15px; /* Ajusta o espaçamento interno */
+    text-align: center; /* Centraliza o conteúdo */
+}
+
+.card-title {
+    font-size: 1rem; /* Tamanho do título */
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.card-text {
+    font-size: 0.9rem; /* Tamanho do texto */
+    color: #6c757d; /* Cor do texto */
+}
+
+.btn-primary {
+    background-color: #2CA6E0; /* Cor do botão */
+    border: none;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+}
+
+.article-section {
+transition: opacity 0.3s ease-in-out;
+}
+
+.article-section.hidden {
+opacity: 0;
+}

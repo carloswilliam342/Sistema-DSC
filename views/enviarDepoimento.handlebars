@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Enviar Depoimento</title>
+</head>
+<body>
+  <div class="container mt-5">
+    <h2 class="text-center">Enviar Depoimento</h2>
+    <form action="/depoimentos/enviar" method="POST" class="mt-4">
+      <div class="mb-3">
+        <label for="texto" class="form-label">Seu Depoimento</label>
+        <textarea id="texto" name="texto" class="form-control" rows="5" required></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Enviar</button>
+    </form>
+  </div>
+</body>
+</html>

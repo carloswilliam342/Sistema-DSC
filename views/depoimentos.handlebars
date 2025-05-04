@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Depoimentos</title>
+</head>
+<body>
+  <div class="container mt-5">
+    <h2 class="text-center">Depoimentos</h2>
+    <div class="row mt-4">
+      {{#each depoimentos}}
+      <div class="col-md-6 mb-3">
+        <div class="card">
+          <div class="card-body">
+            <p class="card-text">{{this.texto}}</p>
+            <p class="text-muted small">Enviado por: {{this.autor}}</p>
+          </div>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+  </div>
+</body>
+</html>

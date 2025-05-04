@@ -1,0 +1,45 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+
+<section class="container mt-5">
+    <h2 class="mb-4 text-primary">Materiais para Download</h2>
+    <div class="row">
+
+        <!-- Guia do Usuário (DOCX - Download) -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body d-flex align-items-start flex-column">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="bi bi-file-earmark-word-fill text-primary me-2 fs-4"></i>
+                        <h5 class="card-title mb-0">Guia do Usuário</h5>
+                    </div>
+                    <p class="card-text">Manual completo para utilizar o sistema DSC com instruções passo a passo.</p>
+                    <a href="/arquivos/guia-usuario.docx" class="btn btn-outline-primary mt-auto" download>
+                        <i class="bi bi-download me-1"></i> Baixar Guia (.docx)
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estudo de Caso (PDF - Visualização) -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="bi bi-file-earmark-pdf-fill text-danger me-2 fs-4"></i>
+                        <h5 class="card-title mb-0">Estudo de Caso</h5>
+                    </div>
+                    <p class="card-text">Exemplo prático de aplicação do DSC com base em uma situação real.</p>
+
+                    <!-- Visualização embutida do PDF -->
+                    <iframe src="/arquivos/estudo-caso.pdf" width="100%" height="300px" style="border: 1px solid #ccc;"></iframe>
+
+                    <a href="/arquivos/estudo-caso.pdf" target="_blank" class="btn btn-outline-danger mt-3">
+                        <i class="bi bi-box-arrow-up-right me-1"></i> Abrir em nova aba
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
