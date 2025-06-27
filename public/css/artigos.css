@@ -83,3 +83,54 @@ transition: opacity 0.3s ease-in-out;
 .article-section.hidden {
 opacity: 0;
 }
+
+.transition-opacity {
+    transition: opacity 0.3s ease;
+}
+.opacity-0 {
+    opacity: 0;
+}
+
+.share-section h5 {
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+@media (max-width: 576px) {
+    .share-section h5 {
+        white-space: normal;
+        font-size: 1rem;
+    }
+}
+
+.share-section h6 {
+    margin-bottom: 0;
+    line-height: 1.3;
+}
+
+.share-title {
+    font-size: 1.25rem;
+    line-height: 1.4;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    max-width: 100%;
+}
+
+@media (max-width: 576px) {
+    .share-title {
+        font-size: 1.1rem;
+        line-height: 1.3;
+    }
+}
+
+@media (max-width: 360px) {
+    .share-title {
+        font-size: 1rem;
+    }
+}
+
+
