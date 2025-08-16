@@ -1,8 +1,9 @@
 import express from "express";
+import { checkAuth } from "./auth.js";
 import multer from "multer";
 import path from "path";
 import { processarDiscurso } from "../controllers/criarDiscursoController.js";
-import { checkAuth } from "./auth.js";
+
 import fs from "fs";
 
 const uploadPath = "uploads/discursos-criados";
@@ -40,12 +41,12 @@ const upload = multer({ dest: "uploads/discursos-criados", fileFilter });
 
 
 // Rota para renderizar a página de criar discurso
-router.get("/", (req, res) => {
+router.get("/", checkAuth, (req, res) => {
     res.render("criar-discurso");
 });
 
 // Rota para processar o discurso
-router.post("/transformar",  upload.single("arquivo"), processarDiscurso);
+router.post("/transformar", checkAuth, upload.single("arquivo"), processarDiscurso);
 
 export default router;
 

@@ -4,6 +4,7 @@ import path from "path";
 import mammoth from "mammoth";
 import upload  from "../config/upload.js"; // Importa o middleware de upload
 import pdfParse from "pdf-parse";
+import ClientGemini from "../client.js"; // Importa o cliente Gemini
 
 export const processarDiscurso = async (req, res) => {
     let texto = req.body.texto || "";
@@ -67,21 +68,67 @@ export const processarDiscurso = async (req, res) => {
     ${texto}
   `;
 
-  try {
-    const response = await axios.post("http://127.0.0.1:11434/api/generate", {
-        model: "mistral",
-        prompt: prompt,
-        stream: false
-    });
+//   try {
+//     const response = await axios.post("http://127.0.0.1:11434/api/generate", {
+//         model: "mistral",
+//         prompt: prompt,
+//         stream: false
+//     });
 
-    console.log("Resposta da API:", response.data.response.toString());
-    return res.json({ discursoTransformado: response.data.response });
+    try {
+        const response = await ClientGemini(prompt);
+        console.log("Resposta da API:", response);
+
+        // Pegue o texto correto do objeto de resposta
+        const textoDiscurso =
+            typeof response === "string"
+                ? response
+                : response.response || response.data?.response || JSON.stringify(response);
+
+        // Salva o discurso transformado em um arquivo .txt
+        const nomeArquivoDiscurso = `discurso-transformado-${Date.now()}.txt`;
+        const caminhoDiscurso = path.resolve("uploads", "discursos-criados", nomeArquivoDiscurso);
+
+        fs.writeFileSync(caminhoDiscurso, textoDiscurso, "utf-8");
+
+        const gerarRelatorio = req.body.relatorio === "true";
+
+        let relatorio = null;
+        let nomeArquivoRelatorio = null;
+        if (gerarRelatorio) {
+            relatorio = `
+===== RELATÓRIO: ANTES E DEPOIS =====
+
+ANTES:
+${texto}
+
+-----------------------------------------------------------------------------------------------------------------
+
+DEPOIS:
+${textoDiscurso}
+`;
+            nomeArquivoRelatorio = `relatorio-antes-depois-${Date.now()}.txt`;
+            const caminhoRelatorio = path.resolve("uploads", "relatorios", nomeArquivoRelatorio);
+            fs.writeFileSync(caminhoRelatorio, relatorio, "utf-8");
+        }
+
+        return res.json({
+            discursoTransformado: textoDiscurso,
+            arquivoSalvo: nomeArquivoDiscurso,
+            relatorio: relatorio,
+            arquivoRelatorio: nomeArquivoRelatorio
+        });
     } catch (error) {
         console.error("Erro na chamada da API:", error.response ? error.response.data : error.message);
         return res.status(500).json({ erro: "Erro ao processar o discurso." });
     }
 };
 
-
 // Middleware de upload para a rota
 export const uploadMiddleware = upload.single("arquivo");
+
+// Cria o diretório uploads/discursos-criados se não existir
+const dir = path.resolve("uploads", "discursos-criados");
+if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+}

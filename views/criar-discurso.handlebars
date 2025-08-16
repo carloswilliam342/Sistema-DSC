@@ -50,7 +50,7 @@
             <input type="file" id="arquivo" name="arquivo" class="form-control">
         </div>
 
-        <div class="form-group">
+        <div class="form-group p-2">
             <label for="relatorio">Gerar relatório de antes e depois?</label>
             <select id="relatorio" name="relatorio" class="form-control">
                 <option value="true">Sim</option>
@@ -58,8 +58,45 @@
             </select>
         </div>
 
-        <button type="submit" class="btn btn-primary">Transformar Discurso</button>
+        <button type="submit" class="btn btn-primary" id="btnTransformar">Transformar Discurso</button>
     </form>
+
+    <!-- Barra de carregamento/spinner + overlay -->
+    <div id="loading-overlay" class="d-none">
+        <div class="overlay-bg"></div>
+        <div id="loading-bar" class="text-center my-4">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Processando...</span>
+            </div>
+            <div class="mt-2 text-white">Processando discurso, aguarde...</div>
+        </div>
+    </div>
+
+    <style>
+    /* Overlay cobrindo toda a tela */
+    #loading-overlay {
+        position: fixed;
+        z-index: 2000;
+        top: 0; left: 0; right: 0; bottom: 0;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    #loading-overlay .overlay-bg {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0,0,0,0.4);
+        z-index: 1;
+    }
+    #loading-bar {
+        position: relative;
+        z-index: 2;
+    }
+    </style>
 
     <div id="resultado" class="mt-4"></div>
 </div>
@@ -68,7 +105,12 @@
 <script>
     document.getElementById("formDiscurso").addEventListener("submit", async function(event) {
         event.preventDefault();
-        
+
+        // Mostra overlay e desabilita o botão
+        document.getElementById("loading-overlay").classList.remove("d-none");
+        document.getElementById("btnTransformar").disabled = true;
+        document.getElementById("resultado").innerHTML = "";
+
         const formData = new FormData(this);
 
         try {
@@ -83,12 +125,37 @@
 
             const data = await response.json();
 
-            document.getElementById("resultado").innerHTML = 
-                `<h4>Discurso Transformado:</h4><p>${data.discursoTransformado}</p>`;
+            let resultadoHtml = `<h4>Discurso Transformado:</h4><p>${data.discursoTransformado}</p>`;
+
+            if (data.relatorio) {
+                // Separar ANTES e DEPOIS usando regex ou split
+                const antesDepois = data.relatorio.split('DEPOIS:');
+                const antes = antesDepois[0].replace('===== RELATÓRIO: ANTES E DEPOIS =====', '').replace('ANTES:', '').trim();
+                const depois = antesDepois[1] ? antesDepois[1].trim() : '';
+
+                resultadoHtml += `
+                    <hr>
+                    <h4>Relatório Antes e Depois:</h4>
+                    <div class="mb-3">
+                        <h5 class="text-secondary">Antes</h5>
+                        <div style="background:#f8f9fa; padding:1em; border-radius:6px; white-space:pre-line;">${antes}</div>
+                    </div>
+                    <div>
+                        <h5 class="text-success">Depois</h5>
+                        <div style="background:#e9ffe9; padding:1em; border-radius:6px; white-space:pre-line;">${depois}</div>
+                    </div>
+                `;
+            }
+
+            document.getElementById("resultado").innerHTML = resultadoHtml;
         } catch (error) {
             console.error("Erro ao processar a resposta:", error);
             document.getElementById("resultado").innerHTML = 
                 `<h4>Erro:</h4><p>Não foi possível processar o discurso.</p>`;
+        } finally {
+            // Esconde overlay e reabilita o botão
+            document.getElementById("loading-overlay").classList.add("d-none");
+            document.getElementById("btnTransformar").disabled = false;
         }
     });
 </script>

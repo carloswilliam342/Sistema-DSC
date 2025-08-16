@@ -190,13 +190,13 @@ app.use(recursosRoutes);
 
 app.use(sobreRoutes);
 
-// app.use("/criar-discurso", discursoCriadoRoutes); 
+app.use("/criar-discurso", discursoCriadoRoutes); 
 
 app.use(beneficiosRoutes);
 
 app.use(artigoRoutes);
 
-// app.use("/", analiseRoutes); 
+app.use("/", analiseRoutes); 
 
 app.use("/", dashboardRouter);
 
