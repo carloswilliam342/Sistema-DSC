@@ -1,6 +1,7 @@
 import axios from "axios";
 import fs from "fs";
 import path from "path";
+import PDFDocument from "pdfkit";
 import mammoth from "mammoth";
 import upload  from "../config/upload.js"; // Importa o middleware de upload
 import pdfParse from "pdf-parse";
@@ -132,3 +133,96 @@ const dir = path.resolve("uploads", "discursos-criados");
 if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
 }
+
+// função de download (converte .txt para PDF e envia)
+export const baixarDiscurso = (req, res) => {
+    try {
+        // raw param pode vir codificado/decodificado dependendo do front
+        const raw = req.params.filename || "";
+        console.log("baixarDiscurso called, raw param:", raw);
+
+        // decode uma vez para ter o nome original
+        let filename;
+        try {
+            filename = decodeURIComponent(raw);
+        } catch (e) {
+            filename = raw;
+        }
+        console.log("baixarDiscurso resolved filename:", filename);
+
+        const txtPath = path.resolve("uploads", "discursos-criados", filename);
+        console.log("checando arquivo em:", txtPath, "exists:", fs.existsSync(txtPath));
+
+        if (!fs.existsSync(txtPath)) {
+            return res.status(404).send("Arquivo não encontrado.");
+        }
+
+        const baseName = path.parse(filename).name;
+        const pdfFileName = `${baseName}.pdf`;
+
+        res.setHeader("Content-Type", "application/pdf");
+        res.setHeader("Content-Disposition", `attachment; filename="${pdfFileName}"`);
+
+        const doc = new PDFDocument({ autoFirstPage: false });
+        doc.pipe(res);
+
+        const content = fs.readFileSync(txtPath, "utf-8");
+        doc.addPage();
+        doc.font("Times-Roman").fontSize(12).text(content, {
+            width: 510,
+            align: "left",
+            lineGap: 4
+        });
+
+        doc.end();
+    } catch (err) {
+        console.error("Erro ao gerar PDF:", err);
+        if (!res.headersSent) res.status(500).send("Erro ao gerar PDF.");
+    }
+};
+
+export const baixarRelatorio = (req, res) => {
+    try {
+        // raw param pode vir codificado/decodificado dependendo do front
+        const raw = req.params.filename || "";
+        console.log("baixarRelatorio called, raw param:", raw);
+
+        // decode uma vez para ter o nome original
+        let filename;
+        try {
+            filename = decodeURIComponent(raw);
+        } catch (e) {
+            filename = raw;
+        }
+        console.log("baixarRelatorio resolved filename:", filename);
+
+        const txtPath = path.resolve("uploads", "relatorios", filename);
+        console.log("checando arquivo em:", txtPath, "exists:", fs.existsSync(txtPath));
+
+        if (!fs.existsSync(txtPath)) {
+            return res.status(404).send("Arquivo não encontrado.");
+        }
+
+        const baseName = path.parse(filename).name;
+        const pdfFileName = `${baseName}.pdf`;
+
+        res.setHeader("Content-Type", "application/pdf");
+        res.setHeader("Content-Disposition", `attachment; filename="${pdfFileName}"`);
+
+        const doc = new PDFDocument({ autoFirstPage: false });
+        doc.pipe(res);
+
+        const content = fs.readFileSync(txtPath, "utf-8");
+        doc.addPage();
+        doc.font("Times-Roman").fontSize(12).text(content, {
+            width: 510,
+            align: "left",
+            lineGap: 4
+        });
+
+        doc.end();
+    } catch (err) {
+        console.error("Erro ao gerar PDF:", err);
+        if (!res.headersSent) res.status(500).send("Erro ao gerar PDF.");
+    }
+};

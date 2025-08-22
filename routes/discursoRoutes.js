@@ -2,7 +2,7 @@ import express from "express";
 import { checkAuth } from "./auth.js";
 import multer from "multer";
 import path from "path";
-import { processarDiscurso } from "../controllers/criarDiscursoController.js";
+import { processarDiscurso, uploadMiddleware, baixarDiscurso, baixarRelatorio } from "../controllers/criarDiscursoController.js";
 
 import fs from "fs";
 
@@ -47,6 +47,12 @@ router.get("/", checkAuth, (req, res) => {
 
 // Rota para processar o discurso
 router.post("/transformar", checkAuth, upload.single("arquivo"), processarDiscurso);
+
+// Rota para download do discurso convertendo para PDF
+router.get("/download/:filename", checkAuth, baixarDiscurso);
+
+// Rota para download do relatório
+router.get("/download-relatorio/:filename", checkAuth, baixarRelatorio);
 
 export default router;
 

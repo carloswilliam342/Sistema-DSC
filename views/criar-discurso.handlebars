@@ -58,7 +58,7 @@
             </select>
         </div>
 
-        <button type="submit" class="btn btn-primary" id="btnTransformar">Transformar Discurso</button>
+        <button id="btnTransformar" class="btn btn-primary">Transformar Discurso</button>
     </form>
 
     <!-- Barra de carregamento/spinner + overlay -->
@@ -146,6 +146,21 @@
                     </div>
                 `;
             }
+            if (data.arquivoSalvo) {
+              resultadoHtml += `
+                <button class="btn btn-outline-success mt-3 btn-baixar" data-file="${data.arquivoSalvo.replace(/"/g,'&quot;')}">
+                  <i class="fas fa-download me-2"></i>Baixar como PDF
+                </button>
+              `;
+            }
+            if (data.arquivoRelatorio) {
+                resultadoHtml += `
+                    <p>
+                        <a class="btn btn-outline-secondary" href="/criar-discurso/download-relatorio/${encodeURIComponent(data.arquivoRelatorio)}">
+                            <i class="fas fa-file-download me-2"></i>Baixar relatório
+                        </a>
+                    </p>`;
+            }
 
             document.getElementById("resultado").innerHTML = resultadoHtml;
         } catch (error) {
@@ -158,4 +173,33 @@
             document.getElementById("btnTransformar").disabled = false;
         }
     });
+
+  document.addEventListener('click', function(e) {
+    const btn = e.target.closest('.btn-baixar');
+    if (!btn) return;
+    const filename = btn.getAttribute('data-file');
+    baixarDiscursoServidor(filename);
+  });
+
+  async function baixarDiscursoServidor(filename) {
+    try {
+      // decode -> encode uma vez (protege contra dupla codificação)
+      const safe = encodeURIComponent(decodeURIComponent(filename));
+      const url = `/criar-discurso/download/${safe}`;
+      const resp = await fetch(url, { method: 'GET', credentials: 'same-origin' });
+      if (!resp.ok) throw new Error('Erro ao baixar: ' + resp.status);
+      const blob = await resp.blob();
+      const pdfName = filename.replace(/\.txt$/i, '.pdf');
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = pdfName;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(link.href);
+    } catch (err) {
+      console.error('Erro ao baixar:', err);
+      alert('Erro ao baixar: ' + err.message);
+    }
+  }
 </script>
