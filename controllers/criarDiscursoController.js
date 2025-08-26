@@ -43,7 +43,7 @@ export const processarDiscurso = async (req, res) => {
     if (!texto.trim()) {
         return res.status(400).json({ erro: "O texto é obrigatório!" });
     }
- // Prompt para a IA Mistral
+ // Prompt para a IA 
   const prompt = `
     Você é um assistente especializado na metodologia do Discurso do Sujeito Coletivo (DSC), uma técnica qualitativa utilizada para sintetizar opiniões individuais em um discurso coletivo representativo.
 
@@ -64,6 +64,10 @@ export const processarDiscurso = async (req, res) => {
     Desenvolvimento: Exposição das ideias centrais de maneira fluida, conectando-as logicamente.
 
     Conclusão: Síntese do discurso, reforçando a mensagem principal e finalizando de forma coerente.
+
+    **IMPORTANTE:**  
+    Retorne **apenas o texto do discurso transformado**.  
+    **Não inclua comentários, explicações, introduções, títulos ou qualquer texto adicional.**
 
     Respostas fornecidas:
     ${texto}
