@@ -172,6 +172,7 @@
               <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required>
               <img src="images/eye-icon.png" alt="Mostrar senha" onclick="togglePassword()">
             </div>
+            <div id="senha-feedback" class="mt-2"></div>
 
             <label for="tipoUsuario">Tipo de Usuário</label>
             <select id="tipoUsuario" name="tipoUsuario" required>
@@ -204,7 +205,9 @@
     </div>
   </div>
 
-  <script>
+<script src="https://cdn.jsdelivr.net/npm/zxcvbn@4.4.2/dist/zxcvbn.js"></script>
+
+ <script>
     function togglePassword() {
       var senha = document.getElementById("senha");
       if (senha.type === "password") {
@@ -213,6 +216,57 @@
         senha.type = "password";
       }
     }
-  </script>
+</script>
+<script>
+const scoreLabels = [
+    "Muito fraca",
+    "Fraca",
+    "Razoável",
+    "Forte",
+    "Muito forte"
+];
+
+// Tradução das sugestões mais comuns do zxcvbn
+function traduzirSugestoes(sugestoes) {
+    if (!sugestoes || !sugestoes.length) return "";
+    return sugestoes.map(s => {
+        return s
+            .replace("Use a few words, avoid common phrases", "Use algumas palavras, evite frases comuns")
+            .replace("No need for symbols, digits, or uppercase letters", "Não é necessário símbolos, números ou letras maiúsculas")
+            .replace("Add another word or two. Uncommon words are better.", "Adicione mais uma ou duas palavras. Palavras incomuns são melhores.")
+            .replace("Straight rows of keys are easy to guess", "Sequências de teclas são fáceis de adivinhar")
+            .replace("Short keyboard patterns are easy to guess", "Padrões curtos de teclado são fáceis de adivinhar")
+            .replace("Use a longer keyboard pattern with more turns", "Use um padrão de teclado mais longo e com mais variações")
+            .replace("Repeats like \"aaa\" are easy to guess", "Repetições como \"aaa\" são fáceis de adivinhar")
+            .replace("Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"", "Repetições como \"abcabcabc\" são só um pouco mais difíceis de adivinhar que \"abc\"")
+            .replace("Avoid sequences", "Evite sequências")
+            .replace("Avoid recent years", "Evite anos recentes")
+            .replace("Avoid years that are associated with you", "Evite anos que estejam associados a você")
+            .replace("Avoid dates and years that are associated with you", "Evite datas e anos que estejam associados a você")
+            .replace("Avoid commonly used passwords", "Evite senhas comuns")
+            .replace("This is a top-10 common password", "Esta é uma das 10 senhas mais comuns")
+            .replace("This is a top-100 common password", "Esta é uma das 100 senhas mais comuns")
+            .replace("This is a very common password", "Esta é uma senha muito comum")
+            .replace("This is similar to a commonly used password", "Esta senha é parecida com uma senha comum")
+            .replace("A word by itself is easy to guess", "Uma palavra sozinha é fácil de adivinhar")
+            .replace("Names and surnames by themselves are easy to guess", "Nomes e sobrenomes sozinhos são fáceis de adivinhar");
+    }).join("<br>");
+}
+
+document.getElementById('senha').addEventListener('input', function(e) {
+    const senha = e.target.value;
+    const feedbackDiv = document.getElementById('senha-feedback');
+    const result = zxcvbn(senha);
+
+    let msg = scoreLabels[result.score];
+    let sugestoes = traduzirSugestoes(result.feedback.suggestions);
+
+    feedbackDiv.innerHTML = `
+        <strong>Força da senha:</strong> ${msg}<br>
+        ${sugestoes}
+    `;
+    feedbackDiv.style.color = result.score >= 3 ? 'green' : 'red';
+});
+</script>
 </body>
 </html>

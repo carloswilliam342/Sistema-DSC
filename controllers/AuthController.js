@@ -52,9 +52,11 @@ export const registrarUsuario = async (req, res) => {
       const imagemPath = req.file ? `/uploads/profile-images/${req.file.filename}` : null;
 
       // Verifica se a senha atende aos requisitos
-      const senhaRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-      if (!senhaRegex.test(senha)) {
-        console.log("Senha inválida:", senha);
+      // Nova verificação: pelo menos 8 caracteres, 1 maiúscula, 1 minúscula, 1 número, 1 símbolo
+      const senhaRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+      const senhaLimpa = senha.trim();
+      
+      if (!senhaRegex.test(senhaLimpa)) {
         req.flash("error_msg", "A senha deve ter pelo menos 8 caracteres, incluindo uma letra maiúscula, uma letra minúscula, um número e um símbolo.");
         return res.redirect("/registro");
       }
