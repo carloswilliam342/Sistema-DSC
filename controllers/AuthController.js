@@ -104,7 +104,8 @@ export const registrarUsuario = async (req, res) => {
         const usuario = await User.findOne({ where: { email } });
 
         if (!usuario || !(await bcrypt.compare(senha, usuario.senha))) {
-          req.flash('error_msg', 'Usuário não encontrado');
+          console.error("Erro no login:", error);
+          req.flash('error_msg', 'Usuário ou senha incorretos');
             return res.render('login');
         }
 
@@ -118,7 +119,7 @@ export const registrarUsuario = async (req, res) => {
         return res.redirect('/dashboard'); // Se não for o primeiro login, vai para a dashboard normal
     } catch (erro) {
         console.error('Erro ao fazer login:', erro);
-        req.flash('error_msg', 'Erro interno ao fazer login');
+        req.flash('error_msg', 'Usuário ou senha incorreto');
         return res.render('login');
     }
 };
