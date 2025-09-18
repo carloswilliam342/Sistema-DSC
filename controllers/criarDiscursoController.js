@@ -113,7 +113,11 @@ DEPOIS:
 ${textoDiscurso}
 `;
             nomeArquivoRelatorio = `relatorio-antes-depois-${Date.now()}.txt`;
-            const caminhoRelatorio = path.resolve("uploads", "relatorios", nomeArquivoRelatorio);
+            const dirRelatorio = path.resolve("uploads", "relatorios");
+            if(!fs.existsSync(dirRelatorio)){
+                fs.mkdirSync(dirRelatorio, {recursive: true});
+            }
+            const caminhoRelatorio = path.join(dirRelatorio, nomeArquivoRelatorio);
             fs.writeFileSync(caminhoRelatorio, relatorio, "utf-8");
         }
 
