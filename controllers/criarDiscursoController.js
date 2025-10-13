@@ -202,10 +202,16 @@ ${textoDiscurso}
 // Middleware de upload para a rota
 export const uploadMiddleware = upload.single("arquivo");
 
-// Cria o diretório uploads/discursos-criados se não existir
-const dir = path.resolve("uploads", "discursos-criados");
-if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
+// Cria os diretórios de upload se não existirem
+const uploadsDir = path.resolve("uploads");
+const discursosCriadosDir = path.join(uploadsDir, "discursos-criados");
+const relatoriosDir = path.join(uploadsDir, "relatorios");
+
+if (!fs.existsSync(discursosCriadosDir)) {
+    fs.mkdirSync(discursosCriadosDir, { recursive: true });
+}
+if (!fs.existsSync(relatoriosDir)) {
+    fs.mkdirSync(relatoriosDir, { recursive: true });
 }
 
 // função de download (converte .txt para PDF e envia)

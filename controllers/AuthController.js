@@ -104,7 +104,7 @@ export const registrarUsuario = async (req, res) => {
         const usuario = await User.findOne({ where: { email } });
 
         if (!usuario || !(await bcrypt.compare(senha, usuario.senha))) {
-          console.error("Erro no login:", error);
+          console.error("Erro no login: Usuário ou senha incorretos");
           req.flash('error_msg', 'Usuário ou senha incorretos');
             return res.render('login');
         }
