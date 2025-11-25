@@ -133,13 +133,18 @@
 
             const data = await response.json();
 
-            let resultadoHtml = `<h4>Discurso Transformado:</h4><p>${data.discursoTransformado}</p>`;
+            // Função para converter asteriscos em tags HTML de negrito
+            const convertAsterisksToHTML = (text) => {
+                return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            };
+
+            let resultadoHtml = `<h4>Discurso Transformado:</h4><p>${convertAsterisksToHTML(data.discursoTransformado)}</p>`;
 
             if (data.relatorio) {
                 // Separar ANTES e DEPOIS usando regex ou split
                 const antesDepois = data.relatorio.split('DEPOIS:');
-                const antes = antesDepois[0].replace('===== RELATÓRIO: ANTES E DEPOIS =====', '').replace('ANTES:', '').trim();
-                const depois = antesDepois[1] ? antesDepois[1].trim() : '';
+                const antes = convertAsterisksToHTML(antesDepois[0].replace('===== RELATÓRIO: ANTES E DEPOIS =====', '').replace('ANTES:', '').trim());
+                const depois = antesDepois[1] ? convertAsterisksToHTML(antesDepois[1].trim()) : '';
 
                 resultadoHtml += `
                     <hr>

@@ -10,6 +10,7 @@ import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
 
 export const processarDiscurso = async (req, res) => {
     let texto = req.body.texto || "";
+    console.log('processarDiscurso called - relatorio:', req.body.relatorio, 'tipoRelatorio:', req.body.tipoRelatorio, 'file present:', !!req.file);
 
     // Se um arquivo foi enviado, processa o conteúdo dele
     if (req.file) {
@@ -46,25 +47,30 @@ export const processarDiscurso = async (req, res) => {
     }
  // Prompt para a IA 
   const prompt = `
-    Você é um assistente especializado na metodologia do Discurso do Sujeito Coletivo (DSC), uma técnica qualitativa utilizada para sintetizar opiniões individuais em um discurso coletivo representativo.
+    Você receberá respostas a uma pergunta aberta, e deverá construir um Discurso do Sujeito Coletivo (DSC) conforme as seguintes etapas obrigatórias:
 
-    Dado um conjunto de respostas individuais sobre um determinado tema, sua tarefa é estruturar um Discurso do Sujeito Coletivo (DSC) seguindo estas diretrizes:
+Identifique e destaque todas as Expressões-Chave (ECHs): trechos literais, curtos, que trazem diretamente o posicionamento e/ou argumento central do respondente. As ECHs devem ser apresentadas de forma explícita, listadas e destacadas.
 
-    Identificação das Ideias Centrais: Analise as respostas fornecidas e identifique as principais ideias que aparecem repetidamente ou que representam padrões significativos no discurso dos participantes.
+Agrupe as ECHs por sentido semelhante e construa a Ideia Central (IC): uma síntese objetiva, curta, descritiva, preferencialmente usando palavras diferentes das ECHs, que represente o sentido coletivo daquele grupo de ECHs.
 
-    Agrupamento por Expressões-Chave: Identifique trechos das respostas que expressem de forma clara e objetiva cada uma das ideias centrais.
+Agrupe as ICs em Categorias: identifique e nomeie cada Categoria de sentido ou posicionamento encontrado no conjunto de respostas.
 
-    Construção do Discurso Coletivo: Com base nas expressões-chave, redija um discurso único na primeira pessoa do singular ("eu"), de forma fluida e coerente, como se fosse a fala de um único indivíduo que representa a coletividade dos participantes.
+Monte o DSC para cada Categoria: use as ECHs daquela categoria para criar um texto coeso, narrativo, na primeira pessoa do singular, curto, objetivo, sem redundâncias e sem interpretações, apenas unindo as ECHs. O DSC deve ter no máximo 4-5 frases, mantendo o essencial das manifestações coletivas, evitando qualquer síntese interpretativa extensa.
 
-    Manutenção da Fidedignidade: Preserve o tom, a linguagem e o contexto das respostas originais, garantindo que o discurso reflita fielmente as opiniões expressas pelos indivíduos.
+Exiba a estrutura completa: Para cada Categoria, apresente (a) a lista de ECHs originais; (b) a IC derivada; (c) o nome da Categoria; (d) o DSC correspondente.
 
-    Estrutura do DSC:
+Não faça interpretação, justificativa ou análise teórica no corpo do DSC – apenas a montagem objetiva e literal dos sentidos presentes nas ECHs.
 
-    Introdução: Apresentação do tema do discurso de forma natural.
+Exemplo (apenas ilustrativo, não copie):
+Categoria: Barreira de acesso
 
-    Desenvolvimento: Exposição das ideias centrais de maneira fluida, conectando-as logicamente.
+ECHs: "não tenho dinheiro para pagar", "os custos são altos", "não consigo bolsa"
 
-    Conclusão: Síntese do discurso, reforçando a mensagem principal e finalizando de forma coerente.
+IC: Dificuldade financeira prejudica o acesso
+
+DSC: Não consigo participar porque não tenho dinheiro suficiente, os custos são altos e as bolsas são poucas.
+
+Siga rigorosamente cada etapa do procedimento para garantir a fidelidade à técnica do DSC, apresentando um texto final curto, coeso, objetivo e representativo do pensamento coletivo.
 
     **IMPORTANTE:**  
     Retorne **apenas o texto do discurso transformado**.  
@@ -120,51 +126,126 @@ DEPOIS:
 ${textoDiscurso}
 `;
             } else if (tipoRelatorio === "estruturado") {
-                // Prompt para relatório estruturado
                 const promptEstruturado = `
-                    Extraia dos textos abaixo os dados dos entrevistados.
-                    Retorne os dados em um formato de array JSON. Cada objeto no array deve representar um entrevistado e conter as seguintes chaves: "nome", "idade", "cidade", "estadoCivil", "renda", "genero", "resposta".
-                    Se um campo não for encontrado para um entrevistado, use o valor null ou uma string vazia.
-                    A sua resposta deve conter APENAS o array JSON, sem nenhum texto adicional, comentários ou a palavra "json" antes ou depois.
+Analise o texto abaixo e forneça APENAS:
 
-                    Texto:
-                    ${texto}
-                `;
+1. DADOS DOS ENTREVISTADOS
+Liste para cada entrevistado:
+- Nome
+- Idade
+- Cidade
+- Estado civil
+- Renda
+- Gênero
+- Cor da Pele
+- Resposta/opinião
 
+2. ANÁLISE GERAL
+- Identifique e liste as 5 palavras mais mencionadas entre todos os respondentes (excluindo artigos e preposições)
+- Extraia um tópico central que representa a opinião coletiva dos entrevistados
+
+3. ANÁLISE POR GÊNERO
+- Liste os pontos comuns nas respostas dos entrevistados do gênero masculino
+- Liste os pontos comuns nas respostas das entrevistadas do gênero feminino
+- Destaque as principais diferenças de perspectiva entre os gêneros (se houver)
+
+IMPORTANTE: Retorne APENAS a análise estruturada acima, não gere nenhum discurso adicional.
+
+Texto para análise:
+${texto}
+`;
                 const respostaEstruturada = await ClientGemini(promptEstruturado);
-                let dadosEntrevistados = [];
-                let relatorioEstruturado = "";
+                const relatorioEstruturado = typeof respostaEstruturada === "string"
+                    ? respostaEstruturada
+                    : respostaEstruturada.response || respostaEstruturada.data?.response || JSON.stringify(respostaEstruturada);
 
-                try {
-                    if (respostaEstruturada && typeof respostaEstruturada === 'string') {
-                        // Limpa a resposta da IA para garantir que seja um JSON válido
-                        const jsonResponse = respostaEstruturada.replace(/```json/g, '').replace(/```/g, '').trim();
-                        dadosEntrevistados = JSON.parse(jsonResponse);
+                console.log('relatorioEstruturado length:', (relatorioEstruturado || '').length);
 
-                        // Formata o texto do relatório a partir dos dados JSON
-                        relatorioEstruturado = dadosEntrevistados.map((p, index) => `
-Entrevistado ${index + 1}
-Nome: ${p.nome || 'N/A'}
-Idade: ${p.idade || 'N/A'}
-Cidade: ${p.cidade || 'N/A'}
-Estado civil: ${p.estadoCivil || 'N/A'}
-Renda: ${p.renda || 'N/A'}
-Gênero: ${p.genero || 'N/A'}
-Resposta/opinião: "${p.resposta || 'N/A'}"
-                        `).join('\n');
-                    } else {
-                        // Se a resposta for nula ou não for uma string, lança um erro para o bloco catch
-                        throw new Error("A resposta da IA para o relatório estruturado veio vazia ou em formato inválido.");
+                // Extrai os dados dos entrevistados do relatório estruturado (mais tolerante a formatos variados)
+                function extractInterviewData(text) {
+                    const entries = [];
+                    const lines = text.split(/\r?\n/);
+                    let current = {};
+
+                    const pushCurrent = () => {
+                        if (Object.keys(current).length > 0) {
+                            // normalize keys
+                            if (!current.resposta) current.resposta = current.resposta || '';
+                            entries.push(current);
+                            current = {};
+                        }
+                    };
+
+                    for (let rawLine of lines) {
+                        const line = rawLine.trim();
+                        if (!line) { // blank line separates entries
+                            pushCurrent();
+                            continue;
+                        }
+
+                        // Normalize: remove leading bullets/asterisks and inline bold asterisks so labels like
+                        // '* Cidade: Recife' or '**Cidade**: Recife' are matched.
+                        const normalized = line
+                            .replace(/^[\s\-\u2022\*]+/, '') // remove leading bullets/spaces/asterisks
+                            .replace(/\*\*/g, '') // remove bold markers
+                            .replace(/\*/g, '')
+                            .trim();
+
+                        // Try several simpler patterns on the normalized line
+                        let m;
+                        m = normalized.match(/^Nome\s*[:\-]\s*(.+)/i);
+                        if (m) { current.nome = m[1].trim(); continue; }
+
+                        m = normalized.match(/^Idade\s*[:\-]\s*(.+)/i);
+                        if (m) { current.idade = m[1].trim(); continue; }
+
+                        m = normalized.match(/^Cidade\s*[:\-]\s*(.+)/i);
+                        if (m) { current.cidade = m[1].trim(); continue; }
+
+                        m = normalized.match(/^(?:Estado\s*civil|Estado\s*Civil)\s*[:\-]\s*(.+)/i);
+                        if (m) { current.estadoCivil = m[1].trim(); continue; }
+
+                        m = normalized.match(/^Renda\s*[:\-]\s*(.+)/i);
+                        if (m) { current.renda = m[1].trim(); continue; }
+
+                        m = normalized.match(/^G[eê]nero\s*[:\-]\s*(.+)/i);
+                        if (m) { current.genero = m[1].trim(); continue; }
+
+                        // resposta/opinião pode aparecer em linhas com prefix 'Resposta' or 'Resposta/opinião'
+                        m = normalized.match(/^(?:Resposta(?:\/opini[oõ]o)?|Resposta \/ Opini[oõ]o)\s*[:\-]\s*(.+)/i);
+                        if (m) { current.resposta = m[1].trim(); pushCurrent(); continue; }
+
+                        // If a line seems like a free-form answer (long text) and we already have a nome, attach as resposta
+                        if (line.length > 40 && current.nome && !current.resposta) {
+                            current.resposta = (current.resposta ? current.resposta + '\n' : '') + line;
+                            pushCurrent();
+                        }
                     }
-                } catch (e) {
-                    console.error("Erro ao parsear JSON da IA, usando resposta como texto puro:", e);
-                    // Fallback: se o JSON falhar ou a resposta for nula, usa a resposta como texto (ou uma mensagem de erro)
-                    relatorioEstruturado = respostaEstruturada;
+                    // push last
+                    pushCurrent();
+                    return entries;
                 }
-                
-    // Monte o relatório incluindo o "DEPOIS"
-    relatorio = `
-===== RELATÓRIO ESTRUTURADO POR ENTREVISTADO =====
+
+                const dadosEntrevistados = extractInterviewData(relatorioEstruturado || '');
+                console.log('dadosEntrevistados extraidos:', dadosEntrevistados.length);
+
+                // Salva os dados dos entrevistados em um arquivo temporário para os gráficos
+                const dadosGraficosFile = `dados_graficos_${Date.now()}.json`;
+                const caminhoDadosGraficos = path.join(relatoriosDir, dadosGraficosFile);
+                try {
+                    fs.mkdirSync(relatoriosDir, { recursive: true });
+                    fs.writeFileSync(caminhoDadosGraficos, JSON.stringify(dadosEntrevistados, null, 2), 'utf-8');
+                    console.log('dados graficos salvos em', caminhoDadosGraficos);
+                } catch (e) {
+                    console.error('Erro ao salvar dados graficos em', caminhoDadosGraficos, e);
+                }
+
+                // Atualiza o nome do arquivo do relatório para incluir o arquivo de dados dos gráficos
+                nomeArquivoRelatorio = `${nomeArquivoRelatorio}&dados=${dadosGraficosFile}`;
+
+                // Monta o relatório final com o DSC separado
+                relatorio = `
+===== RELATÓRIO ESTRUTURADO E ANÁLISE DE DISCURSO =====
 
 ${relatorioEstruturado}
 
@@ -172,19 +253,18 @@ ${relatorioEstruturado}
 
 DEPOIS:
 ${textoDiscurso}
-`;
-                // Se houver dados para gráficos, salva o JSON e anexa o nome ao arquivo de relatório
-                if (dadosEntrevistados.length > 0) {
-                    const dadosGraficosPath = path.resolve("uploads", "relatorios", `dados-graficos-${Date.now()}.json`);
-                    fs.writeFileSync(dadosGraficosPath, JSON.stringify(dadosEntrevistados));
-                    // Anexa a informação do arquivo de dados ao nome do relatório para a URL de download
-                    nomeArquivoRelatorio += `&dados=${path.basename(dadosGraficosPath)}`;
-                }
+                `;
             }
 
             const dirRelatorio = path.resolve("uploads", "relatorios");            
             const caminhoRelatorio = path.join(dirRelatorio, nomeArquivoRelatorio.split('&dados=')[0]); // Salva usando apenas o nome do arquivo .txt
-            fs.writeFileSync(caminhoRelatorio, relatorio, "utf-8");
+            try {
+                fs.mkdirSync(dirRelatorio, { recursive: true });
+                fs.writeFileSync(caminhoRelatorio, relatorio, "utf-8");
+                console.log('relatorio salvo em', caminhoRelatorio);
+            } catch (e) {
+                console.error('Erro ao salvar relatorio em', caminhoRelatorio, e);
+            }
         }
 
         return res.json({
@@ -199,13 +279,14 @@ ${textoDiscurso}
     }
 };
 
-// Middleware de upload para a rota
-export const uploadMiddleware = upload.single("arquivo");
-
-// Cria os diretórios de upload se não existirem
+// Configura os diretórios necessários
 const uploadsDir = path.resolve("uploads");
 const discursosCriadosDir = path.join(uploadsDir, "discursos-criados");
 const relatoriosDir = path.join(uploadsDir, "relatorios");
+const dirRelatorio = relatoriosDir; // Adiciona a declaração do dirRelatorio aqui
+
+// Middleware de upload para a rota
+export const uploadMiddleware = upload.single("arquivo");
 
 if (!fs.existsSync(discursosCriadosDir)) {
     fs.mkdirSync(discursosCriadosDir, { recursive: true });
@@ -303,34 +384,70 @@ export const baixarRelatorio = async (req, res) => {
             const dadosPath = path.resolve("uploads", "relatorios", dadosGraficosFile);
             if (fs.existsSync(dadosPath)) {
                 const dadosEntrevistados = JSON.parse(fs.readFileSync(dadosPath, 'utf-8'));
+                console.log('baixarRelatorio: dadosEntrevistados length =', Array.isArray(dadosEntrevistados) ? dadosEntrevistados.length : 'nao-array');
 
                 doc.addPage().fontSize(16).text('Análise Gráfica dos Entrevistados', { align: 'center' });
                 doc.moveDown(2);
 
-                // Gera e insere o gráfico de Gênero
-                const bufferGraficoGenero = await gerarGrafico(dadosEntrevistados, 'genero', 'pie', 'Distribuição por Gênero');
-                if (bufferGraficoGenero) {
-                    doc.image(bufferGraficoGenero, {
-                        fit: [450, 300],
-                        align: 'center',
-                        valign: 'center'
-                    });
-                    doc.moveDown(2);
+                // Gera e insere o gráfico de Gênero (com proteção e debug)
+                try {
+                    const bufferGraficoGenero = await gerarGrafico(dadosEntrevistados, 'genero', 'pie', 'Distribuição por Gênero');
+                    if (bufferGraficoGenero && bufferGraficoGenero.length > 0) {
+                        // salva debug
+                        try {
+                            const debugPath = path.join(relatoriosDir, `debug-grafico-genero-${Date.now()}.png`);
+                            fs.writeFileSync(debugPath, bufferGraficoGenero);
+                            console.log('debug grafico genero salvo em', debugPath);
+                        } catch (e) {
+                            console.warn('falha ao salvar debug grafico genero', e.message);
+                        }
+
+                        doc.image(bufferGraficoGenero, {
+                            fit: [450, 300],
+                            align: 'center',
+                            valign: 'center'
+                        });
+                        doc.moveDown(2);
+                    } else {
+                        console.warn('bufferGraficoGenero vazio ou invalido');
+                    }
+                } catch (errGraf) {
+                    console.error('Erro ao gerar/inserir grafico genero:', errGraf);
                 }
 
-                // Gera e insere o gráfico de Cidade
-                const bufferGraficoCidade = await gerarGrafico(dadosEntrevistados, 'cidade', 'bar', 'Distribuição por Cidade');
-                if (bufferGraficoCidade) {
-                    doc.addPage().fontSize(16).text('Distribuição por Cidade', { align: 'center' }).moveDown(2);
-                    doc.image(bufferGraficoCidade, {
-                        fit: [450, 400],
-                        align: 'center',
-                        valign: 'center'
-                    });
+                // Gera e insere o gráfico de Cidade (com proteção e debug)
+                try {
+                    const bufferGraficoCidade = await gerarGrafico(dadosEntrevistados, 'cidade', 'bar', 'Distribuição por Cidade');
+                    if (bufferGraficoCidade && bufferGraficoCidade.length > 0) {
+                        try {
+                            const debugPath2 = path.join(relatoriosDir, `debug-grafico-cidade-${Date.now()}.png`);
+                            fs.writeFileSync(debugPath2, bufferGraficoCidade);
+                            console.log('debug grafico cidade salvo em', debugPath2);
+                        } catch (e) {
+                            console.warn('falha ao salvar debug grafico cidade', e.message);
+                        }
+
+                        doc.addPage().fontSize(16).text('Distribuição por Cidade', { align: 'center' }).moveDown(2);
+                        doc.image(bufferGraficoCidade, {
+                            fit: [450, 400],
+                            align: 'center',
+                            valign: 'center'
+                        });
+                    } else {
+                        console.warn('bufferGraficoCidade vazio ou invalido');
+                    }
+                } catch (errGraf2) {
+                    console.error('Erro ao gerar/inserir grafico cidade:', errGraf2);
                 }
 
                 // Limpa o arquivo JSON temporário
-                fs.unlinkSync(dadosPath);
+                try {
+                    fs.unlinkSync(dadosPath);
+                } catch (e) {
+                    console.warn('falha ao remover dadosPath:', e.message);
+                }
+            } else {
+                console.warn('dadosGraficosFile informado, mas arquivo nao existe:', dadosPath);
             }
         }
 
@@ -358,7 +475,16 @@ async function gerarGrafico(dados, chave, tipo, titulo) {
 
     if (Object.keys(contagem).length === 0) return null;
 
-    const chartJSNodeCanvas = new ChartJSNodeCanvas({ width: 600, height: 400, backgroundColour: 'white' });
+    const chartJSNodeCanvas = new ChartJSNodeCanvas({ 
+        width: 600, 
+        height: 400, 
+        backgroundColour: 'white',
+        chartCallback: (ChartJS) => {
+            // Opcional: personalização global do Chart.js
+            ChartJS.defaults.responsive = true;
+            ChartJS.defaults.maintainAspectRatio = false;
+        }
+    });
 
     const configuration = {
         type: tipo,
@@ -367,11 +493,52 @@ async function gerarGrafico(dados, chave, tipo, titulo) {
             datasets: [{
                 label: titulo,
                 data: Object.values(contagem),
-                backgroundColor: ['#3e95cd', '#8e5ea2', '#3cba9f', '#e8c3b9', '#c45850'],
+                backgroundColor: [
+                    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF',
+                    '#FF9F40', '#47C49A', '#9C27B0', '#2196F3', '#FF5722'
+                ],
+                borderColor: 'white',
+                borderWidth: 2,
             }],
         },
-        options: { plugins: { title: { display: true, text: titulo, font: { size: 18 } } } }
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: titulo,
+                    font: { size: 18, weight: 'bold' },
+                    padding: 20
+                },
+                legend: {
+                    display: true,
+                    position: tipo === 'pie' ? 'right' : 'top',
+                    labels: {
+                        boxWidth: 20,
+                        padding: 20,
+                        font: {
+                            size: 12
+                        }
+                    }
+                }
+            },
+            layout: {
+                padding: {
+                    left: 20,
+                    right: 20,
+                    top: 20,
+                    bottom: 20
+                }
+            }
+        }
     };
 
-    return await chartJSNodeCanvas.renderToBuffer(configuration);
+    const buffer = await chartJSNodeCanvas.renderToBuffer(configuration);
+    try {
+        console.log(`gerarGrafico: chave=${chave} tipo=${tipo} labels=${Object.keys(contagem).length} bufferBytes=${buffer?.length || 0}`);
+    } catch (e) {
+        console.error('Erro ao logar info do gráfico', e);
+    }
+    return buffer;
 }
