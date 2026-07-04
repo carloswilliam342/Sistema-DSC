@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import User from "../models/User.js";
+import { BASE_PATH } from "../config/basePath.js";
 import multer from "multer";
 import path from "path";
 
@@ -45,7 +46,7 @@ export const registrarUsuario = async (req, res) => {
       if (err) {
         console.error("Erro ao fazer upload da imagem:", err);
         req.flash("error_msg", "Erro ao fazer upload da imagem. Certifique-se de que o arquivo é uma imagem válida.");
-        return res.redirect("/registro");
+        return res.redirect(BASE_PATH + "/registro");
       }
 
       const { nome, email, senha, tipoUsuario } = req.body; // Captura o tipo de usuário
@@ -58,7 +59,7 @@ export const registrarUsuario = async (req, res) => {
       
       if (!senhaRegex.test(senhaLimpa)) {
         req.flash("error_msg", "A senha deve ter pelo menos 8 caracteres, incluindo uma letra maiúscula, uma letra minúscula, um número e um símbolo.");
-        return res.redirect("/registro");
+        return res.redirect(BASE_PATH + "/registro");
       }
 
       // Verifica se o usuário já existe
@@ -67,7 +68,7 @@ export const registrarUsuario = async (req, res) => {
       if (usuarioExistente) {
         console.log("Usuário já existe:", usuarioExistente);
         req.flash("error_msg", "E-mail já cadastrado!");
-        return res.redirect("/registro");
+        return res.redirect(BASE_PATH + "/registro");
       }
 
       // Hash da senha antes de salvar
@@ -84,12 +85,12 @@ export const registrarUsuario = async (req, res) => {
       });
 
       req.flash("success_msg", "Cadastro realizado com sucesso! Faça login.");
-      res.redirect("/login");
+      res.redirect(BASE_PATH + "/login");
     });
   } catch (error) {
     console.error("Erro no registro:", error);
     req.flash("error_msg", "Erro ao registrar usuário.");
-    res.redirect("/registro");
+    res.redirect(BASE_PATH + "/registro");
   }
 };
 
@@ -113,10 +114,10 @@ export const registrarUsuario = async (req, res) => {
         req.flash('success_msg', 'Login realizado com sucesso!');
 
         if (usuario.primeiroLogin) {
-            return res.redirect('/bem-vindo');
+            return res.redirect(BASE_PATH + '/bem-vindo');
         }
 
-        return res.redirect('/dashboard'); // Se não for o primeiro login, vai para a dashboard normal
+        return res.redirect(BASE_PATH + '/dashboard'); // Se não for o primeiro login, vai para a dashboard normal
     } catch (erro) {
         console.error('Erro ao fazer login:', erro);
         req.flash('error_msg', 'Usuário ou senha incorreto');
@@ -126,6 +127,6 @@ export const registrarUsuario = async (req, res) => {
 
 export const logout = (req, res) => {
   req.session.destroy(() => {
-    res.redirect("/login");
+    res.redirect(BASE_PATH + "/login");
   });
 };

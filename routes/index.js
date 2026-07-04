@@ -1,12 +1,13 @@
 import { Router } from 'express';
 import User from '../models/User.js';
 import Discurso from '../models/Discurso.js'; // Certifique-se de importar o modelo de discursos
+import { BASE_PATH } from '../config/basePath.js';
 
 const router = Router();
 
 router.get('/bem-vindo', async (req, res) => {
     if (!req.session.usuario || !req.session.usuario.primeiroLogin) {
-        return res.redirect('/dashboard'); // Se não for o primeiro login, redireciona para a página principal
+        return res.redirect(BASE_PATH + '/dashboard'); // Se não for o primeiro login, redireciona para a página principal
     }
 
     // Atualiza o usuário para indicar que ele já passou pelo primeiro login

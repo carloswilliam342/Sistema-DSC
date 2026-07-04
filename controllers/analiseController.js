@@ -1,4 +1,5 @@
 import Analise from "../models/Analise.js";
+import { BASE_PATH } from "../config/basePath.js";
 
 // Exibe o formulário de criação de análise
 export const renderizarFormulario = (req, res) => {
@@ -19,7 +20,7 @@ export const salvarAnalise = async (req, res) => {
       descricao,
     });
 
-    res.redirect("/lista-analises"); // Redireciona para a lista de análises após salvar
+    res.redirect(BASE_PATH + "/lista-analises"); // Redireciona para a lista de análises após salvar
   } catch (error) {
     console.error(error);
     res.status(500).send("Erro ao salvar análise.");
@@ -86,7 +87,7 @@ export const visualizarAnalise = async (req, res) => {
         descricao,
       });
   
-      res.redirect("/lista-analises"); // Redireciona para a lista de análises após salvar
+      res.redirect(BASE_PATH + "/lista-analises"); // Redireciona para a lista de análises após salvar
     } catch (error) {
       console.error(error);
       res.status(500).send("Erro ao salvar alterações da análise.");
@@ -102,7 +103,7 @@ export const visualizarAnalise = async (req, res) => {
         return res.status(404).send("Análise não encontrada.");
       }
       await analise.destroy(); // Exclui a análise
-      res.redirect("/lista-analises"); // Redireciona para a lista de análises
+      res.redirect(BASE_PATH + "/lista-analises"); // Redireciona para a lista de análises
     } catch (error) {
       console.error(error);
       res.status(500).send("Erro ao excluir análise.");

@@ -1,6 +1,7 @@
 import express from "express";
 import { engine } from "express-handlebars";
 import sequelize from "./config/database.js";
+import { BASE_PATH } from "./config/basePath.js";
 import dotenv from "dotenv";
 import path from "path";
 import { allowInsecurePrototypeAccess } from "@handlebars/allow-prototype-access";
@@ -29,6 +30,7 @@ dotenv.config();
 
 
 const app = express();
+const router = express.Router();
 
 // Interpretando dados do formulário
 app.use(express.urlencoded({ extended: true }));
@@ -36,10 +38,16 @@ app.use(express.json()); // Processa JSON
 
 app.use(cors());
 
+// Disponibiliza o prefixo de subdiretório (ex: /dsc em produção) para as views
+app.use((req, res, next) => {
+  res.locals.basePath = BASE_PATH;
+  next();
+});
+
 // Middleware para arquivos estáticos (CSS, JS, imagens)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-app.use(express.static(path.join(__dirname, 'public')))
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+router.use(express.static(path.join(__dirname, 'public')))
+router.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const MySQLStore = expressMySQLSession(session);
 const sessionStore = new MySQLStore({
@@ -90,6 +98,12 @@ app.engine('handlebars', engine({
     },
     json: function (context) {
       return JSON.stringify(context);
+    },
+    withBase: function (value) {
+      if (typeof value === "string" && value.startsWith("/")) {
+        return BASE_PATH + value;
+      }
+      return value;
     },
     truncate: function (str, len) {
       if (!str) return "";
@@ -183,39 +197,45 @@ sequelize.authenticate()
 const upload = multer({dest: "uploads/imagens-discursos"})
 
 // Rota inicial
-app.get("/", (req, res) => {
+router.get("/", (req, res) => {
   res.render("home", { usuario: req.session.usuario }); // Renderiza a página inicial
 });
 
 
 
-app.use("/", authRoutes);
+router.use("/", authRoutes);
 
-app.use("/discursos", discursosRoutes);
+router.use("/discursos", discursosRoutes);
 
-app.use("/depoimentos", depoimentosRoutes);
+router.use("/depoimentos", depoimentosRoutes);
 
-app.use(comoFuncionaRoutes);
+router.use(comoFuncionaRoutes);
 
-app.use(recursosRoutes);
+router.use(recursosRoutes);
 
-app.use(sobreRoutes);
+router.use(sobreRoutes);
 
-app.use("/criar-discurso", discursoCriadoRoutes); 
+router.use("/criar-discurso", discursoCriadoRoutes);
 
-app.use(beneficiosRoutes);
+router.use(beneficiosRoutes);
 
-app.use(artigoRoutes);
+router.use(artigoRoutes);
 
-app.use("/", analiseRoutes); 
+router.use("/", analiseRoutes);
 
-app.use("/", dashboardRouter);
+router.use("/", dashboardRouter);
 
-app.use('/', indexRouter);
-  
+router.use('/', indexRouter);
+
+if (BASE_PATH) {
+  app.use(BASE_PATH, router);
+} else {
+  app.use(router);
+}
+
 // Inicia o servidor
 app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
+  console.log(`Servidor rodando em http://localhost:${PORT}${BASE_PATH}`);
 });
 
 

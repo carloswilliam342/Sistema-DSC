@@ -9,6 +9,7 @@ services:
       DB_NAME: ${DB_NAME:-dsc_ifma}
       GEMINI_API_KEY: ${GEMINI_API_KEY}
       SESSION_SECRET: ${SESSION_SECRET}
+      BASE_PATH: ${BASE_PATH:-}
     volumes:
       - ./uploads:/app/uploads
     restart: unless-stopped

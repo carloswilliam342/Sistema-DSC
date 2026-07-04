@@ -141,7 +141,7 @@
         <div class="card">
           <div class="tabs">
             <button class="active">Registre-se</button>
-            <button onclick="window.location.href='/login'">Login</button>
+            <button onclick="window.location.href='{{basePath}}/login'">Login</button>
           </div>
 
           <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
@@ -160,7 +160,7 @@
           </div>
           {{/if}}
 
-          <form action="/registro" method="POST" enctype="multipart/form-data">
+          <form action="{{basePath}}/registro" method="POST" enctype="multipart/form-data">
             <label for="email">Endereço de e-mail</label>
             <input type="email" id="email" name="email" placeholder="Digite seu endereço de e-mail" required>
 
@@ -198,7 +198,7 @@
             <button type="submit">Registrar</button>
           </form>
 
-          <p>Já tem uma conta? <a href="/login">Faça login</a></p>
+          <p>Já tem uma conta? <a href="{{basePath}}/login">Faça login</a></p>
         </div>
       </div>
 

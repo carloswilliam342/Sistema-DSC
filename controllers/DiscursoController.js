@@ -1,5 +1,6 @@
 import Discurso from "../models/Discurso.js";
 import upload from "../config/upload.js";
+import { BASE_PATH } from "../config/basePath.js";
 import Favorito from "../models/Favorito.js";
 import PDFDocument from "pdfkit";
 import ExcelJS from "exceljs";
@@ -53,17 +54,17 @@ export async function criarDiscurso(req, res) {
         // Verifica se o usuário é pesquisador
         if (usuario.tipoUsuario !== "PESQUISADOR") {
             req.flash("erro", "Apenas pesquisadores podem anexar discursos.");
-            return res.redirect("/discursos");
+            return res.redirect(BASE_PATH + "/discursos");
         }
 
         upload.single('imagem')(req, res, async function (err) {
             if (err) {
                 req.flash("erro", "Erro ao fazer upload da imagem: " + err);
-                return res.redirect("/discursos/novo");
+                return res.redirect(BASE_PATH + "/discursos/novo");
             }
 
             const { titulo, categoria, descricao } = req.body;
-            const imagemPath = req.file ? `../uploads/imagens-discursos/${req.file.filename}` : null;
+            const imagemPath = req.file ? `/uploads/imagens-discursos/${req.file.filename}` : null;
 
             if (!titulo || !categoria || !descricao) {
                 return res.status(400).send("Todos os campos são obrigatórios!");
@@ -78,7 +79,7 @@ export async function criarDiscurso(req, res) {
             });
 
             req.flash("sucess_msg", "Discurso anexado com sucesso!");
-            res.redirect(`/discursos/categoria/${categoria}`);
+            res.redirect(BASE_PATH + `/discursos/categoria/${categoria}`);
         });
     } catch (error) {
         console.error("Erro ao adicionar discurso:", error);
