@@ -9,6 +9,7 @@ import dashboardRouter from "./routes/dashboard.js";
 import discursosRoutes from "./routes/discursos.js";
 import discursoCriadoRoutes from "./routes/discursoRoutes.js"
 import session from "express-session";
+import expressMySQLSession from "express-mysql-session";
 import authRoutes from "./routes/auth.js";
 import beneficiosRoutes from "./routes/beneficios.js";
 import comoFuncionaRoutes from "./routes/como-funciona.js";
@@ -40,8 +41,18 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 app.use(express.static(path.join(__dirname, 'public')))
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+const MySQLStore = expressMySQLSession(session);
+const sessionStore = new MySQLStore({
+  host: process.env.DB_HOST || "localhost",
+  port: 3306,
+  user: process.env.DB_USER || "root",
+  password: process.env.DB_PASSWORD || "",
+  database: process.env.DB_NAME || "dsc_ifma",
+});
+
 app.use(session({
-  secret: "segredo_super_secreto",
+  store: sessionStore,
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {
