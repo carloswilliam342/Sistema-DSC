@@ -1,9 +1,12 @@
 import { Sequelize } from 'sequelize'
+import dotenv from 'dotenv'
 
-const NOME_BANCO = 'dsc_ifma'
-const USUARIO = 'root'
-const SENHA = ''
-const HOST = 'localhost'
+dotenv.config()
+
+const NOME_BANCO = process.env.DB_NAME || 'dsc_ifma'
+const USUARIO = process.env.DB_USER || 'root'
+const SENHA = process.env.DB_PASSWORD || ''
+const HOST = process.env.DB_HOST || 'localhost'
 
 const sequelize = new Sequelize(NOME_BANCO, USUARIO, SENHA,
     {
