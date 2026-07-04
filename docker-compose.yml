@@ -1,0 +1,13 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      DB_USER: ${DB_USER:-root}
+      DB_PASSWORD: ${DB_PASSWORD:-root}
+      DB_NAME: ${DB_NAME:-dsc_ifma}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+    volumes:
+      - ./uploads:/app/uploads
+    restart: unless-stopped
