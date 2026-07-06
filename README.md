@@ -112,10 +112,12 @@ Configuradas no arquivo `.env` (na raiz). **Esse arquivo está no `.gitignore` e
 | `DB_PASSWORD` | Senha do MySQL | `sua_senha` |
 | `DB_NAME` | Nome do banco | `dsc_ifma` |
 | `GEMINI_API_KEY` | Chave da API do Google Gemini (obtida em https://aistudio.google.com/app/apikey) | `AIza...` |
+| `SESSION_SECRET` | Chave que assina o cookie de sessão. **Obrigatória em produção** (a sessão é persistida no MySQL). Gere uma aleatória: `openssl rand -hex 32` | `f3a9...` |
+| `BASE_PATH` | Prefixo de subdiretório onde o app é servido (ex: `/dsc` se rodar em `fabrica.ifma.edu.br/dsc`). Vazio = servido na raiz | `/dsc` ou vazio |
 | `NODE_ENV` | Ambiente | `development` / `production` / `test` |
 | `PORT` | Porta do servidor | `3000` |
 
-> ⚠️ **Segurança:** a `GEMINI_API_KEY` é sensível. Na migração de servidor, transfira o `.env` por um canal seguro (nunca por git, e-mail ou chat). Se a chave já tiver vazado em algum lugar, **gere uma nova** no Google AI Studio.
+> ⚠️ **Segurança:** a `GEMINI_API_KEY` e o `SESSION_SECRET` são sensíveis. Na migração de servidor, transfira o `.env` por um canal seguro (nunca por git, e-mail ou chat). Se a `GEMINI_API_KEY` já tiver vazado em algum lugar, **gere uma nova** no Google AI Studio. Defina um `SESSION_SECRET` forte e único em produção — sem ele, as sessões dos usuários ficam vulneráveis.
 
 ---
 
@@ -162,6 +164,11 @@ Pontos que **não são óbvios** e vão te poupar tempo:
 - As **migrations** (`npx sequelize-cli db:migrate`) são a fonte oficial do schema.
 - O `server.js` também chama `sequelize.sync()` no boot, que cria tabelas faltantes a partir dos models. Útil em dev, mas **em produção confie nas migrations** para mudanças de schema.
 
+### Deploy em subdiretório (`BASE_PATH`)
+- Todas as rotas são montadas num `router` sob o prefixo `BASE_PATH` (definido em `config/basePath.js` a partir da env). Ex: com `BASE_PATH=/dsc`, o login fica em `/dsc/login`.
+- Nas views, use `{{basePath}}/...` para links absolutos e o helper `{{withBase ...}}` para caminhos dinâmicos (ex: imagens vindas do banco). Caminhos **relativos** (`images/x.jpg`) já funcionam sob qualquer prefixo.
+- Com `BASE_PATH` vazio (padrão), tudo é servido na raiz — inclusive nos testes.
+
 ---
 
 ## ⚠️ Pontos de atenção / armadilhas conhecidas
@@ -170,7 +177,7 @@ Pontos que **não são óbvios** e vão te poupar tempo:
 |---|---|
 | **`pdf-parse`** | Importado via `pdf-parse/lib/pdf-parse.js` (e não `"pdf-parse"`) de propósito — o entrypoint padrão do pacote tem um bug que trava o boot tentando ler um PDF de teste inexistente. Não "corrija" esse import. |
 | **Gemini 503/429** | O `client.js` já tem retry automático com backoff (3 tentativas). Se mesmo assim falhar, é sobrecarga do próprio Google — esperar ou trocar de modelo. |
-| **Segredo de sessão hardcoded** | Em `app.js`, o `session({ secret: "segredo_super_secreto" })` está fixo no código. **TODO de segurança:** mover para uma variável de ambiente (ex: `SESSION_SECRET`) antes/durante a produção. |
+| **Sessão** | A sessão é persistida no **MySQL** (`express-mysql-session`) e assinada com `SESSION_SECRET`. Em `NODE_ENV=test` cai automaticamente para store em memória (não conecta no MySQL durante os testes). Lembre de definir um `SESSION_SECRET` forte em produção. |
 | **Imagens** | As imagens de `public/images/` já foram otimizadas (PNGs pesados → JPEG). Ao adicionar imagens novas, prefira JPEG e evite arquivos de vários MB. |
 | **Pastas de upload** | `uploads/` precisa de permissão de escrita para o usuário que roda o Node. Subpastas geradas em runtime estão no `.gitignore`. |
 
