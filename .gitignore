@@ -5,3 +5,8 @@ uploads/relatorios/
 .env
 .env.dev
 .env.prod
+
+coverage/
+
+# Uploads de usuários em runtime (fotos de perfil, imagens de discursos)
+public/uploads/

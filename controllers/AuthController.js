@@ -3,6 +3,7 @@ import User from "../models/User.js";
 import { BASE_PATH } from "../config/basePath.js";
 import multer from "multer";
 import path from "path";
+import { validarSenha } from "../utils/validarSenha.js";
 
 export const exibirLogin = (req, res) => {
   res.render("login");
@@ -52,12 +53,9 @@ export const registrarUsuario = async (req, res) => {
       const { nome, email, senha, tipoUsuario } = req.body; // Captura o tipo de usuário
       const imagemPath = req.file ? `/uploads/profile-images/${req.file.filename}` : null;
 
-      // Verifica se a senha atende aos requisitos
-      // Nova verificação: pelo menos 8 caracteres, 1 maiúscula, 1 minúscula, 1 número, 1 símbolo
-      const senhaRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-      const senhaLimpa = senha.trim();
-      
-      if (!senhaRegex.test(senhaLimpa)) {
+      // Verifica se a senha atende aos requisitos:
+      // pelo menos 8 caracteres, 1 maiúscula, 1 minúscula, 1 número, 1 símbolo
+      if (!validarSenha(senha)) {
         req.flash("error_msg", "A senha deve ter pelo menos 8 caracteres, incluindo uma letra maiúscula, uma letra minúscula, um número e um símbolo.");
         return res.redirect(BASE_PATH + "/registro");
       }

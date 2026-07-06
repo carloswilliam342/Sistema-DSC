@@ -68,7 +68,7 @@ class BeneficiosController {
 
         const cardsComplementares = [
             {
-                imagem: "images/card1.png",
+                imagem: "images/card1.jpg",
                 titulo: "Participe da nossa comunidade",
                 descricao: "Contribua com o desenvolvimento do DSC! Envie sugestões, participe de pesquisas ou compartilhe suas experiências com o sistema.",
                 botao: "Enviar sugestão"

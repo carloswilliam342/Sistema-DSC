@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/database.js";
 
-const DiscursoCriado = sequelize.define("Discurso", {
+const DiscursoCriado = sequelize.define("DiscursoCriado", {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,

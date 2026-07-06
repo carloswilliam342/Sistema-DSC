@@ -8,7 +8,7 @@ $(document).ready(function() {
             { nome: "João", estrelas: 5, feedback: "Explicação clara sobre coleta de falas.", imagem: "images/user-feedback.png" }
         ],
         "analise": [
-            { nome: "Mariana", estrelas: 5, feedback: "A categorização ficou muito clara!", imagem: "images/imagem-de-depoimento.png" }
+            { nome: "Mariana", estrelas: 5, feedback: "A categorização ficou muito clara!", imagem: "images/imagem-de-depoimento.jpg" }
         ],
         "geracao": [
             { nome: "Lina", estrelas: 5, feedback: "Excelente curso!", imagem: "images/noticia2.png" },

@@ -7,6 +7,7 @@ import upload  from "../config/upload.js"; // Importa o middleware de upload
 import pdfParse from "pdf-parse/lib/pdf-parse.js";
 import ClientGemini from "../client.js"; // Importa o cliente Gemini
 import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
+import { extractInterviewData } from "../utils/extractInterviewData.js";
 
 export const processarDiscurso = async (req, res) => {
     let texto = req.body.texto || "";
@@ -160,71 +161,6 @@ ${texto}
                     : respostaEstruturada.response || respostaEstruturada.data?.response || JSON.stringify(respostaEstruturada);
 
                 console.log('relatorioEstruturado length:', (relatorioEstruturado || '').length);
-
-                // Extrai os dados dos entrevistados do relatório estruturado (mais tolerante a formatos variados)
-                function extractInterviewData(text) {
-                    const entries = [];
-                    const lines = text.split(/\r?\n/);
-                    let current = {};
-
-                    const pushCurrent = () => {
-                        if (Object.keys(current).length > 0) {
-                            // normalize keys
-                            if (!current.resposta) current.resposta = current.resposta || '';
-                            entries.push(current);
-                            current = {};
-                        }
-                    };
-
-                    for (let rawLine of lines) {
-                        const line = rawLine.trim();
-                        if (!line) { // blank line separates entries
-                            pushCurrent();
-                            continue;
-                        }
-
-                        // Normalize: remove leading bullets/asterisks and inline bold asterisks so labels like
-                        // '* Cidade: Recife' or '**Cidade**: Recife' are matched.
-                        const normalized = line
-                            .replace(/^[\s\-\u2022\*]+/, '') // remove leading bullets/spaces/asterisks
-                            .replace(/\*\*/g, '') // remove bold markers
-                            .replace(/\*/g, '')
-                            .trim();
-
-                        // Try several simpler patterns on the normalized line
-                        let m;
-                        m = normalized.match(/^Nome\s*[:\-]\s*(.+)/i);
-                        if (m) { current.nome = m[1].trim(); continue; }
-
-                        m = normalized.match(/^Idade\s*[:\-]\s*(.+)/i);
-                        if (m) { current.idade = m[1].trim(); continue; }
-
-                        m = normalized.match(/^Cidade\s*[:\-]\s*(.+)/i);
-                        if (m) { current.cidade = m[1].trim(); continue; }
-
-                        m = normalized.match(/^(?:Estado\s*civil|Estado\s*Civil)\s*[:\-]\s*(.+)/i);
-                        if (m) { current.estadoCivil = m[1].trim(); continue; }
-
-                        m = normalized.match(/^Renda\s*[:\-]\s*(.+)/i);
-                        if (m) { current.renda = m[1].trim(); continue; }
-
-                        m = normalized.match(/^G[eê]nero\s*[:\-]\s*(.+)/i);
-                        if (m) { current.genero = m[1].trim(); continue; }
-
-                        // resposta/opinião pode aparecer em linhas com prefix 'Resposta' or 'Resposta/opinião'
-                        m = normalized.match(/^(?:Resposta(?:\/opini[oõ]o)?|Resposta \/ Opini[oõ]o)\s*[:\-]\s*(.+)/i);
-                        if (m) { current.resposta = m[1].trim(); pushCurrent(); continue; }
-
-                        // If a line seems like a free-form answer (long text) and we already have a nome, attach as resposta
-                        if (line.length > 40 && current.nome && !current.resposta) {
-                            current.resposta = (current.resposta ? current.resposta + '\n' : '') + line;
-                            pushCurrent();
-                        }
-                    }
-                    // push last
-                    pushCurrent();
-                    return entries;
-                }
 
                 const dadosEntrevistados = extractInterviewData(relatorioEstruturado || '');
                 console.log('dadosEntrevistados extraidos:', dadosEntrevistados.length);

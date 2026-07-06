@@ -32,7 +32,7 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
     <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="#">DSC</a>
+        <a class="navbar-brand fw-bold" href="{{#if usuario}}/dashboard{{else}}/{{/if}}">DSC</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -57,7 +57,7 @@
             <a href="{{basePath}}/acessar-beneficios" class="btn btn-success">Saiba Mais Agora</a>
         </div>
         <div class="col-12 col-md-6 text-center">
-            <img src="{{basePath}}/images/noticia-principal.png" class="img-fluid rounded" alt="Imagem DSC">
+            <img src="{{basePath}}/images/noticia-principal.jpg" class="img-fluid rounded" alt="Imagem DSC">
         </div>
     </section>
     
@@ -104,7 +104,7 @@
             </div>
             <div class="col-12 col-md-6">
                 <div class="card shadow-sm h-100">
-                    <img src="{{basePath}}/images/noticia-principal.png" class="card-img-top" alt="Impacto do DSC">
+                    <img src="{{basePath}}/images/noticia-principal.jpg" class="card-img-top" alt="Impacto do DSC">
                     <div class="card-body">
                         <p class="card-text fw-bold">"Como o DSC tem impactado os projetos dos pesquisadores?"</p>
                         <p><strong>Total de respostas:</strong> 120</p>
