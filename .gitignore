@@ -3,3 +3,5 @@ node_modules/
 uploads/discursos-criados/
 uploads/relatorios/
 .env
+.env.dev
+.env.prod

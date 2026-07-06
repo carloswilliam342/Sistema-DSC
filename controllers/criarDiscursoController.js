@@ -4,7 +4,7 @@ import path from "path";
 import PDFDocument from "pdfkit";
 import mammoth from "mammoth";
 import upload  from "../config/upload.js"; // Importa o middleware de upload
-import pdfParse from "pdf-parse";
+import pdfParse from "pdf-parse/lib/pdf-parse.js";
 import ClientGemini from "../client.js"; // Importa o cliente Gemini
 import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
 

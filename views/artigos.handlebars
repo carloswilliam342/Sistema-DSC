@@ -30,34 +30,34 @@
   }
 </style>
 
-<link rel="stylesheet" href="/css/artigos.css">
+<link rel="stylesheet" href="{{basePath}}/css/artigos.css">
 
 
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="/dashboard">DSC</a>
+        <a class="navbar-brand fw-bold" href="{{basePath}}/dashboard">DSC</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto align-items-center">
-                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="/sobre">Sobre o DSC</a></li>
-                <li class="nav-item"><a class="nav-link" href="/como-funciona">Como funciona</a></li>
-                <li class="nav-item"><a class="nav-link" href="/recursos">Recursos</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{basePath}}/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{basePath}}/sobre">Sobre o DSC</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{basePath}}/como-funciona">Como funciona</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{basePath}}/recursos">Recursos</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Contato</a></li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="{{usuario.imagemPerfil}}" alt="Profile picture" class="rounded-circle me-2" width="30">
+                        <img src="{{withBase usuario.imagemPerfil}}" alt="Profile picture" class="rounded-circle me-2" width="30">
                         <span>{{usuario.nome}}</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Perfil</a></li>
-                        <li><a class="dropdown-item" href="/discursos/favoritos"><i class="fas fa-heart me-2"></i>Meus Favoritos</a></li>
+                        <li><a class="dropdown-item" href="{{basePath}}/discursos/favoritos"><i class="fas fa-heart me-2"></i>Meus Favoritos</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>Sair</a></li>
+                        <li><a class="dropdown-item" href="{{basePath}}/logout"><i class="fas fa-sign-out-alt me-2"></i>Sair</a></li>
                     </ul>
                 </li>
             </ul>
@@ -112,13 +112,13 @@
         {{#each artigosRelevantes}}
         <div class="col-12 col-sm-6 col-lg-3 mb-4">
             <div class="card h-100 shadow-sm">
-                <img src="{{#if this.imagem}}{{this.imagem}}{{else}}/uploads/imagens-discursos/default.png{{/if}}" 
+                <img src="{{#if this.imagem}}{{withBase this.imagem}}{{else}}{{basePath}}/uploads/imagens-discursos/default.png{{/if}}" 
                     class="card-img-top p-3" 
                     alt="Imagem do Artigo" 
                     style="max-height: 150px; object-fit: contain;">
                 <div class="card-body text-center">
                     <h5 class="card-title">{{this.titulo}}</h5>
-                    <a href="/discursos/{{this.id}}" class="btn btn-primary mt-3">Acessar material</a>
+                    <a href="{{basePath}}/discursos/{{this.id}}" class="btn btn-primary mt-3">Acessar material</a>
                 </div>
             </div>
         </div>
@@ -132,7 +132,7 @@
             <div class="col-md-6">
                 <h2>Transforme dados qualitativos em discursos significativos com o DSC</h2>
                 <p>Com o DSC, você pode organizar, interpretar e representar dados qualitativos de forma clara e objetiva.</p>
-                <a href="/sobre" class="btn btn-outline-primary">Saiba mais sobre o DSC</a>
+                <a href="{{basePath}}/sobre" class="btn btn-outline-primary">Saiba mais sobre o DSC</a>
             </div>
             <div class="col-md-6">
                 <img src="images/transforme-dados.png" alt="Transforme dados" class="img-fluid rounded">
@@ -147,14 +147,14 @@
             {{#each ferramentasCursos}}
             <div class="col-12 col-sm-6 col-lg-3 mb-4"> <!-- Corrigido: adicionado col-12 -->
                 <div class="card h-100 shadow-sm">
-                    <img src="{{#if this.imagem}}{{this.imagem}}{{else}}/uploads/imagens-discursos/default.png{{/if}}" 
+                    <img src="{{#if this.imagem}}{{withBase this.imagem}}{{else}}{{basePath}}/uploads/imagens-discursos/default.png{{/if}}" 
                         class="card-img-top p-3" 
                         alt="Imagem do Curso" 
                         style="max-height: 150px; object-fit: contain;">
                     <div class="card-body text-center">
                         <h5 class="card-title">{{this.titulo}}</h5>
                         <p class="card-text text-muted">{{truncate this.conteudo 150}}</p>
-                        <a href="/discursos/{{this.id}}" class="btn btn-primary mt-3">Acessar agora</a>
+                        <a href="{{basePath}}/discursos/{{this.id}}" class="btn btn-primary mt-3">Acessar agora</a>
                     </div>
                 </div>
             </div>
@@ -173,6 +173,6 @@
     </footer>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="/js/artigos.js"></script>
+<script src="{{basePath}}/js/artigos.js"></script>
 
 

@@ -1,0 +1,5 @@
+services:
+  app:
+    environment:
+      DB_HOST: ${DB_HOST}
+      NODE_ENV: production

@@ -1,12 +1,13 @@
 import express from "express";
 import { exibirLogin, exibirRegistro, registrarUsuario, logarUsuario, logout } from "../controllers/AuthController.js";
+import { BASE_PATH } from "../config/basePath.js";
 
 const router = express.Router();
 
 // Authentication middleware
 export const checkAuth = (req, res, next) => {
     if (!req.session.usuario) {
-        return res.redirect('/login');
+        return res.redirect(BASE_PATH + '/login');
     }
     next();
 };

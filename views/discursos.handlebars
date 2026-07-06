@@ -5,27 +5,27 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="/dashboard">DSC</a>
+        <a class="navbar-brand fw-bold" href="{{basePath}}/dashboard">DSC</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto align-items-center">
-                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="/sobre">Sobre o DSC</a></li>
-                <li class="nav-item"><a class="nav-link" href="/como-funciona">Como funciona</a></li>
-                <li class="nav-item"><a class="nav-link" href="/recursos">Recursos</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{basePath}}/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{basePath}}/sobre">Sobre o DSC</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{basePath}}/como-funciona">Como funciona</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{basePath}}/recursos">Recursos</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Contato</a></li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="{{usuario.imagemPerfil}}" alt="Profile picture" class="rounded-circle me-2" width="30">
+                        <img src="{{withBase usuario.imagemPerfil}}" alt="Profile picture" class="rounded-circle me-2" width="30">
                         <span>{{usuario.nome}}</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Perfil</a></li>
-                        <li><a class="dropdown-item" href="/discursos/favoritos"><i class="fas fa-heart me-2"></i>Meus Favoritos</a></li>
+                        <li><a class="dropdown-item" href="{{basePath}}/discursos/favoritos"><i class="fas fa-heart me-2"></i>Meus Favoritos</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>Sair</a></li>
+                        <li><a class="dropdown-item" href="{{basePath}}/logout"><i class="fas fa-sign-out-alt me-2"></i>Sair</a></li>
                     </ul>
                 </li>
             </ul>
@@ -61,7 +61,7 @@
             {{#each discursos}}
             <div class="col-md-6 col-lg-4 mb-4">
                 <div class="card shadow-sm h-100">
-                    <img src="{{#if this.imagem}}/{{this.imagem}}{{else}}/uploads/imagens-discursos/default.png{{/if}}" 
+                    <img src="{{#if this.imagem}}{{withBase this.imagem}}{{else}}{{basePath}}/uploads/imagens-discursos/default.png{{/if}}" 
                     class="card-img-top" style="height: 200px; object-fit: cover;" alt="Imagem do Discurso">
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">{{this.titulo}}</h5>
@@ -74,15 +74,15 @@
                         </p>
                         <small class="text-muted">Criado em: {{formatDate this.dataCriacao}}</small>
                         <div class="text-center mt-3">
-                            <a href="/discursos/{{this.id}}" class="btn btn-primary btn-sm">Ver mais</a>
+                            <a href="{{basePath}}/discursos/{{this.id}}" class="btn btn-primary btn-sm">Ver mais</a>
                         </div>
                         
 
                         <!-- Botões de Exportação (apenas para pesquisadores) -->
                         {{#ifCond ../usuario.tipoUsuario "==" "PESQUISADOR"}}
                         <div class="mt-3">
-                            <a href="/discursos/{{this.id}}/exportar-pdf" class="btn btn-outline-danger btn-sm">Exportar PDF</a>
-                            <a href="/discursos/{{this.id}}/exportar-excel" class="btn btn-outline-success btn-sm">Exportar Excel</a>
+                            <a href="{{basePath}}/discursos/{{this.id}}/exportar-pdf" class="btn btn-outline-danger btn-sm">Exportar PDF</a>
+                            <a href="{{basePath}}/discursos/{{this.id}}/exportar-excel" class="btn btn-outline-success btn-sm">Exportar Excel</a>
                         </div>
                         {{/ifCond}}
 
@@ -96,7 +96,7 @@
             {{/each}}
             {{#ifCond usuario.tipoUsuario "===" "PESQUISADOR"}}
                 <div class="text-center mb-4">
-                    <a href="/discursos/novo" class="btn btn-success">Adicionar Discurso</a>
+                    <a href="{{basePath}}/discursos/novo" class="btn btn-success">Adicionar Discurso</a>
                 </div>
             {{/ifCond}}
         </div>
@@ -106,7 +106,7 @@
         <p>Nenhum discurso encontrado para esta categoria.</p>
         {{#ifCond usuario.tipoUsuario "==" "PESQUISADOR"}}
             <div class="text-center p-3">
-                <a href="/discursos/novo" class="btn btn-success">Adicionar Discurso</a>
+                <a href="{{basePath}}/discursos/novo" class="btn btn-success">Adicionar Discurso</a>
             </div>
         {{/ifCond}}
     </div>
@@ -114,7 +114,7 @@
 
 <script>
     function favoritarDiscurso(discursoId) {
-        fetch("/discursos/favoritar", {
+        fetch("{{basePath}}/discursos/favoritar", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ discursoId })
