@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { handlebarsHelpers } from "../../utils/handlebarsHelpers.js";
 
-const { eq, json, truncate, formatDate, ifCond } = handlebarsHelpers;
+const { eq, json, truncate, formatDate, ifCond, withBase } = handlebarsHelpers;
 
 describe("helper eq", () => {
   it("retorna true para valores estritamente iguais", () => {
@@ -18,6 +18,34 @@ describe("helper eq", () => {
 describe("helper json", () => {
   it("serializa o objeto para JSON", () => {
     expect(json({ a: 1 })).toBe('{"a":1}');
+  });
+});
+
+describe("helper withBase", () => {
+  // Nos testes BASE_PATH é "" (env não setada), então o foco aqui é a
+  // normalização do caminho — o prefixo em si é aplicado em produção.
+  it("normaliza caminho legado com ../ para caminho absoluto", () => {
+    expect(withBase("../uploads/imagens-discursos/x.webp")).toBe(
+      "/uploads/imagens-discursos/x.webp"
+    );
+  });
+
+  it("normaliza múltiplos ../ no início", () => {
+    expect(withBase("../../uploads/x.png")).toBe("/uploads/x.png");
+  });
+
+  it("mantém caminho absoluto já correto", () => {
+    expect(withBase("/uploads/x.png")).toBe("/uploads/x.png");
+  });
+
+  it("não altera URLs externas nem caminhos relativos sem ../", () => {
+    expect(withBase("http://exemplo.com/x.png")).toBe("http://exemplo.com/x.png");
+    expect(withBase("images/x.png")).toBe("images/x.png");
+  });
+
+  it("retorna o valor original para não-strings", () => {
+    expect(withBase(null)).toBe(null);
+    expect(withBase(undefined)).toBe(undefined);
   });
 });
 

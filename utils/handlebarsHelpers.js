@@ -9,12 +9,15 @@ export const handlebarsHelpers = {
   json: function (context) {
     return JSON.stringify(context);
   },
-  // Prefixa caminhos absolutos com o BASE_PATH (deploy em subdiretório).
+  // Prefixa caminhos com o BASE_PATH (deploy em subdiretório).
+  // Normaliza caminhos legados que começam com "../" (ex: "../uploads/...",
+  // salvos por versões antigas do sistema) para "/uploads/..." antes de
+  // prefixar — senão o navegador resolve o "../" subindo do subdiretório e
+  // perde o prefixo (ex: /dsc/dashboard -> /uploads/... em vez de /dsc/uploads/...).
   withBase: function (value) {
-    if (typeof value === "string" && value.startsWith("/")) {
-      return BASE_PATH + value;
-    }
-    return value;
+    if (typeof value !== "string") return value;
+    const normalizado = value.replace(/^(\.\.\/)+/, "/");
+    return normalizado.startsWith("/") ? BASE_PATH + normalizado : normalizado;
   },
   truncate: function (str, len) {
     if (!str) return "";

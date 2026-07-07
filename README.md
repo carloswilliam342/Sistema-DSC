@@ -204,12 +204,19 @@ Checklist para levar o sistema para um novo servidor (do dev que sai para o dev 
    mysql -u root -p dsc_ifma < dsc_ifma_backup.sql
    ```
 6. [ ] Rodar migrations pendentes: `npx sequelize-cli db:migrate`
-7. [ ] **Copiar a pasta `uploads/`** do servidor antigo (imagens de perfil, discursos e relatórios enviados por usuários ficam lá, **não** no banco — e boa parte está no `.gitignore`, ou seja, não vem pelo `git clone`).
+7. [ ] **Copiar as pastas de upload** do servidor antigo — os arquivos enviados por usuários ficam **no disco, não no banco**, e estão no `.gitignore` (não vêm pelo `git clone`). São **duas** pastas:
+   - **`public/uploads/`** → imagens de discursos (`imagens-discursos/`) e fotos de perfil (`profile-images/`)
+   - **`uploads/`** → discursos criados (`discursos-criados/`) e relatórios (`relatorios/`)
+   ```bash
+   # Ex. (rsync do servidor antigo para o novo):
+   rsync -av usuario@servidor-antigo:/caminho/dsc/public/uploads/ ./public/uploads/
+   rsync -av usuario@servidor-antigo:/caminho/dsc/uploads/ ./uploads/
+   ```
 8. [ ] Validar localmente: `npm test` (deve passar tudo) e depois `npm start`
 9. [ ] Subir com PM2 (ver [GUIA_IMPLANTACAO_IFMA.md](GUIA_IMPLANTACAO_IFMA.md))
 10. [ ] Testar no navegador: login, criação de discurso (valida a integração com o Gemini) e download de PDF
 
-> 💡 Os itens que a maioria esquece numa migração: **os dados do MySQL** (passo 5) e a **pasta `uploads/`** (passo 7). O código no git não traz nenhum dos dois.
+> 💡 Os itens que a maioria esquece numa migração: **os dados do MySQL** (passo 5) e as **pastas de upload** `public/uploads/` + `uploads/` (passo 7). O código no git não traz nenhum dos dois — se as imagens dos discursos não carregarem em produção, quase sempre é a `public/uploads/` que não foi copiada.
 
 ---
 
