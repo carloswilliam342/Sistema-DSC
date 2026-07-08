@@ -11,9 +11,7 @@ COPY package*.json ./
 
 RUN npm install
 
-COPY --chown=node:node . .
-
-USER node
+COPY . .
 
 EXPOSE 3000
 

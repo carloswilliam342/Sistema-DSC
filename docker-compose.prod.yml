@@ -7,7 +7,17 @@ services:
       REDIS_USERNAME: ${REDIS_USERNAME:-}
       REDIS_PASSWORD: ${REDIS_PASSWORD:-}
       NODE_ENV: production
+    # redis-sessions roda numa rede macvlan própria (IP de LAN direto), separada
+    # da rede padrão do compose. Sem estar conectado nela também, o app não tem
+    # rota pra alcançar 10.99.95.25 (dá EHOSTUNREACH).
+    networks:
+      - default
+      - redis_lan_macvlan
 
   migrate:
     environment:
       DB_HOST: ${DB_HOST}
+
+networks:
+  redis_lan_macvlan:
+    external: true
