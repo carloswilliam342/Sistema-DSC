@@ -36,6 +36,12 @@ app.use(express.json()); // Processa JSON
 
 app.use(cors());
 
+// Healthcheck. Fica fora do BASE_PATH (não é montado no router) para
+// responder sempre em /health, independente do subdiretório de produção.
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
 // Disponibiliza o prefixo de subdiretório (ex: /dsc) para as views
 app.use((req, res, next) => {
   res.locals.basePath = BASE_PATH;

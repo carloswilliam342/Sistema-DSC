@@ -5,15 +5,12 @@ import { BASE_PATH } from "./config/basePath.js";
 
 const PORT = process.env.PORT || 3000;
 
-// Testa a conexão e sincroniza o banco
+// Testa a conexão. O schema é gerenciado pelas migrations (serviço `migrate`),
+// não mais por sequelize.sync().
 sequelize
   .authenticate()
   .then(() => {
     console.log("Conexão com o MySQL foi bem-sucedida!");
-    return sequelize.sync();
-  })
-  .then(() => {
-    console.log("Banco de dados sincronizado!");
   })
   .catch((err) => {
     console.error("Erro ao conectar ao banco de dados:", err);
