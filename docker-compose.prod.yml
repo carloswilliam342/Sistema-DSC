@@ -3,3 +3,7 @@ services:
     environment:
       DB_HOST: ${DB_HOST}
       NODE_ENV: production
+
+  migrate:
+    environment:
+      DB_HOST: ${DB_HOST}
