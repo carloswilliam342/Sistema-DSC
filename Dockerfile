@@ -11,11 +11,8 @@ COPY package*.json ./
 
 RUN npm install
 
-COPY . .
+COPY --chown=node:node . .
 
-# node:20-bookworm-slim já traz um usuário não-root (uid/gid 1000) pronto pra
-# uso. Roda a aplicação com ele em vez de root.
-RUN chown -R node:node /app
 USER node
 
 EXPOSE 3000
