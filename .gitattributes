@@ -1,0 +1,5 @@
+# Scripts de shell precisam de LF; CRLF quebra a execução em containers
+# Linux (ex: db/init/01-create-users.sh falha silenciosamente no boot do
+# MySQL se for checked out com CRLF, o que acontece por padrão em Windows
+# com core.autocrlf=true).
+*.sh text eol=lf

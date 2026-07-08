@@ -6,6 +6,12 @@ uploads/relatorios/
 .env.dev
 .env.prod
 
+# Setup local (antivírus/proxy com SSL scanning) para builds Docker nesta
+# máquina. Específico do ambiente de cada dev, nunca committar.
+docker-local-ca.crt
+Dockerfile.local
+docker-compose.local.yml
+
 coverage/
 
 # Uploads de usuários em runtime (fotos de perfil, imagens de discursos)
