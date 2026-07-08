@@ -62,6 +62,8 @@ if (process.env.NODE_ENV !== "test") {
       host: process.env.REDIS_HOST || "localhost",
       port: Number(process.env.REDIS_PORT) || 6379,
     },
+    username: process.env.REDIS_USERNAME || undefined,
+    password: process.env.REDIS_PASSWORD || undefined,
   });
   redisClient.on("error", (err) => console.error("Erro na conexão com o Redis:", err));
   redisClient.connect().catch((err) => console.error("Erro ao conectar ao Redis:", err));

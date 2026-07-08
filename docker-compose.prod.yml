@@ -4,6 +4,8 @@ services:
       DB_HOST: ${DB_HOST}
       REDIS_HOST: ${REDIS_HOST}
       REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_USERNAME: ${REDIS_USERNAME:-}
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
       NODE_ENV: production
 
   migrate:

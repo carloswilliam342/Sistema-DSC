@@ -2,6 +2,8 @@ services:
   app:
     environment:
       DB_HOST: db
+      DB_USER: ${DB_APP_USER:-dsc_app}
+      DB_PASSWORD: ${DB_APP_PASSWORD:-app_password}
       REDIS_HOST: redis
       NODE_ENV: development
     depends_on:
@@ -13,6 +15,8 @@ services:
   migrate:
     environment:
       DB_HOST: db
+      DB_USER: ${DB_MIGRATE_USER:-dsc_migrate}
+      DB_PASSWORD: ${DB_MIGRATE_PASSWORD:-migrate_password}
     depends_on:
       db:
         condition: service_healthy
@@ -22,8 +26,13 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
       MYSQL_DATABASE: ${DB_NAME:-dsc_ifma}
+      DB_APP_USER: ${DB_APP_USER:-dsc_app}
+      DB_APP_PASSWORD: ${DB_APP_PASSWORD:-app_password}
+      DB_MIGRATE_USER: ${DB_MIGRATE_USER:-dsc_migrate}
+      DB_MIGRATE_PASSWORD: ${DB_MIGRATE_PASSWORD:-migrate_password}
     volumes:
       - db_data:/var/lib/mysql
+      - ./db/init:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_PASSWORD:-root}"]
       interval: 10s
