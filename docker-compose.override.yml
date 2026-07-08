@@ -2,9 +2,12 @@ services:
   app:
     environment:
       DB_HOST: db
+      REDIS_HOST: redis
       NODE_ENV: development
     depends_on:
       db:
+        condition: service_healthy
+      redis:
         condition: service_healthy
 
   migrate:

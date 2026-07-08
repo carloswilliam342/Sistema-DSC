@@ -2,6 +2,8 @@ services:
   app:
     environment:
       DB_HOST: ${DB_HOST}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT:-6379}
       NODE_ENV: production
 
   migrate:

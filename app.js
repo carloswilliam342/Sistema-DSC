@@ -4,7 +4,8 @@ import path from "path";
 import { allowInsecurePrototypeAccess } from "@handlebars/allow-prototype-access";
 import { fileURLToPath } from "url";
 import session from "express-session";
-import expressMySQLSession from "express-mysql-session";
+import { createClient } from "redis";
+import RedisStore from "connect-redis";
 import flash from "connect-flash";
 import Handlebars from "handlebars";
 import cors from "cors";
@@ -52,17 +53,22 @@ app.use((req, res, next) => {
 router.use(express.static(path.join(__dirname, "public")));
 router.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Sessão: em produção persiste no MySQL; em teste usa store em memória
-// (evita tentar conectar no MySQL ao importar o app durante os testes).
+// Sessão: em produção/dev persiste no Redis; em teste usa store em memória
+// (evita tentar conectar no Redis ao importar o app durante os testes).
 let sessionStore;
 if (process.env.NODE_ENV !== "test") {
-  const MySQLStore = expressMySQLSession(session);
-  sessionStore = new MySQLStore({
-    host: process.env.DB_HOST || "localhost",
-    port: 3306,
-    user: process.env.DB_USER || "root",
-    password: process.env.DB_PASSWORD || "",
-    database: process.env.DB_NAME || "dsc_ifma",
+  const redisClient = createClient({
+    socket: {
+      host: process.env.REDIS_HOST || "localhost",
+      port: Number(process.env.REDIS_PORT) || 6379,
+    },
+  });
+  redisClient.on("error", (err) => console.error("Erro na conexão com o Redis:", err));
+  redisClient.connect().catch((err) => console.error("Erro ao conectar ao Redis:", err));
+
+  sessionStore = new RedisStore({
+    client: redisClient,
+    prefix: "dsc:sess:",
   });
 }
 
