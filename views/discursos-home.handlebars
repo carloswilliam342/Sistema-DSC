@@ -5,16 +5,16 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="{{basePath}}/dashboard">DSC</a>
+        <a class="navbar-brand fw-bold" href="{{@root.basePath}}/dashboard">DSC</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto align-items-center">
-                <li class="nav-item"><a class="nav-link" href="{{basePath}}/">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{basePath}}/sobre">Sobre o DSC</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{basePath}}/como-funciona">Como funciona</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{basePath}}/recursos">Recursos</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{@root.basePath}}/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{@root.basePath}}/sobre">Sobre o DSC</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{@root.basePath}}/como-funciona">Como funciona</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{@root.basePath}}/recursos">Recursos</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Contato</a></li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -23,9 +23,9 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Perfil</a></li>
-                        <li><a class="dropdown-item" href="{{basePath}}/discursos/favoritos"><i class="fas fa-heart me-2"></i>Meus Favoritos</a></li>
+                        <li><a class="dropdown-item" href="{{@root.basePath}}/discursos/favoritos"><i class="fas fa-heart me-2"></i>Meus Favoritos</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="{{basePath}}/logout"><i class="fas fa-sign-out-alt me-2"></i>Sair</a></li>
+                        <li><a class="dropdown-item" href="{{@root.basePath}}/logout"><i class="fas fa-sign-out-alt me-2"></i>Sair</a></li>
                     </ul>
                 </li>
             </ul>
@@ -42,13 +42,13 @@
     <section class="my-5 p-4 rounded" style="background-color: #f8f9fa;">
         <h4 class="text-center mb-4">Escolha uma categoria</h4>
         <div class="d-flex flex-wrap justify-content-center gap-3">
-            <a href="{{basePath}}/discursos/categoria/Educação" class="badge rounded-pill text-white px-3 py-2" style="background-color: #FF5733;">Educação</a>
-            <a href="{{basePath}}/discursos/categoria/Sustentabilidade" class="badge rounded-pill text-white px-3 py-2" style="background-color: #E67E22;">Sustentabilidade</a>
-            <a href="{{basePath}}/discursos/categoria/Inovação Social" class="badge rounded-pill text-white px-3 py-2" style="background-color: #9B59B6;">Inovação Social</a>
-            <a href="{{basePath}}/discursos/categoria/Saúde" class="badge rounded-pill text-white px-3 py-2" style="background-color: #2ECC71;">Saúde</a>
-            <a href="{{basePath}}/discursos/categoria/Vulnerabilidades" class="badge rounded-pill text-white px-3 py-2" style="background-color: #F1C40F;">Vulnerabilidades</a>
-            <a href="{{basePath}}/discursos/categoria/Direitos Humanos" class="badge rounded-pill text-white px-3 py-2" style="background-color: #3498DB;">Direitos Humanos</a>
-            <a href="{{basePath}}/discursos/categoria/Política" class="badge rounded-pill text-white px-3 py-2" style="background-color: #1ABC9C;">Política</a>
+            <a href="{{@root.basePath}}/discursos/categoria/Educação" class="badge rounded-pill text-white px-3 py-2" style="background-color: #FF5733;">Educação</a>
+            <a href="{{@root.basePath}}/discursos/categoria/Sustentabilidade" class="badge rounded-pill text-white px-3 py-2" style="background-color: #E67E22;">Sustentabilidade</a>
+            <a href="{{@root.basePath}}/discursos/categoria/Inovação Social" class="badge rounded-pill text-white px-3 py-2" style="background-color: #9B59B6;">Inovação Social</a>
+            <a href="{{@root.basePath}}/discursos/categoria/Saúde" class="badge rounded-pill text-white px-3 py-2" style="background-color: #2ECC71;">Saúde</a>
+            <a href="{{@root.basePath}}/discursos/categoria/Vulnerabilidades" class="badge rounded-pill text-white px-3 py-2" style="background-color: #F1C40F;">Vulnerabilidades</a>
+            <a href="{{@root.basePath}}/discursos/categoria/Direitos Humanos" class="badge rounded-pill text-white px-3 py-2" style="background-color: #3498DB;">Direitos Humanos</a>
+            <a href="{{@root.basePath}}/discursos/categoria/Política" class="badge rounded-pill text-white px-3 py-2" style="background-color: #1ABC9C;">Política</a>
         </div>
     </section>
 
@@ -56,12 +56,12 @@
     <section class="my-5 p-4 rounded" style="background-color: #f0f4f8;">
         <h4 class="text-center mb-4">Escolha uma categoria</h4>
         <div class="d-flex flex-wrap justify-content-center gap-3">
-            <a href="{{basePath}}/discursos/categoria/Participação Pública" class="badge rounded-pill text-white px-3 py-2" style="background-color: #FF5733;">Participação Pública</a>
-            <a href="{{basePath}}/discursos/categoria/Vulnerabilidade Urbana" class="badge rounded-pill text-white px-3 py-2" style="background-color: #E67E22;">Vulnerabilidade Urbana</a>
-            <a href="{{basePath}}/discursos/categoria/Tecnologia & Sociedade" class="badge rounded-pill text-white px-3 py-2" style="background-color: #9B59B6;">Tecnologia & Sociedade</a>
-            <a href="{{basePath}}/discursos/categoria/Ética e Justiça" class="badge rounded-pill text-white px-3 py-2" style="background-color: #2ECC71;">Ética e Justiça</a>
-            <a href="{{basePath}}/discursos/categoria/Saúde Mental" class="badge rounded-pill text-white px-3 py-2" style="background-color: #F1C40F;">Saúde Mental</a>
-            <a href="{{basePath}}/discursos/categoria/Empreendedorismo" class="badge rounded-pill text-white px-3 py-2" style="background-color: #3498DB;">Empreendedorismo</a>
+            <a href="{{@root.basePath}}/discursos/categoria/Participação Pública" class="badge rounded-pill text-white px-3 py-2" style="background-color: #FF5733;">Participação Pública</a>
+            <a href="{{@root.basePath}}/discursos/categoria/Vulnerabilidade Urbana" class="badge rounded-pill text-white px-3 py-2" style="background-color: #E67E22;">Vulnerabilidade Urbana</a>
+            <a href="{{@root.basePath}}/discursos/categoria/Tecnologia & Sociedade" class="badge rounded-pill text-white px-3 py-2" style="background-color: #9B59B6;">Tecnologia & Sociedade</a>
+            <a href="{{@root.basePath}}/discursos/categoria/Ética e Justiça" class="badge rounded-pill text-white px-3 py-2" style="background-color: #2ECC71;">Ética e Justiça</a>
+            <a href="{{@root.basePath}}/discursos/categoria/Saúde Mental" class="badge rounded-pill text-white px-3 py-2" style="background-color: #F1C40F;">Saúde Mental</a>
+            <a href="{{@root.basePath}}/discursos/categoria/Empreendedorismo" class="badge rounded-pill text-white px-3 py-2" style="background-color: #3498DB;">Empreendedorismo</a>
         </div>
     </section>
 
@@ -69,12 +69,12 @@
     <section class="my-5 p-4 rounded" style="background-color: #eaf2f8;">
         <h4 class="text-center mb-4">Escolha uma categoria</h4>
         <div class="d-flex flex-wrap justify-content-center gap-3">
-            <a href="{{basePath}}/discursos/categoria/Segurança Pública" class="badge rounded-pill text-white px-3 py-2" style="background-color: #FF5733;">Segurança Pública</a>
-            <a href="{{basePath}}/discursos/categoria/Diversidade" class="badge rounded-pill text-white px-3 py-2" style="background-color: #E67E22;">Diversidade</a>
-            <a href="{{basePath}}/discursos/categoria/Violência e Direitos" class="badge rounded-pill text-white px-3 py-2" style="background-color: #9B59B6;">Violência e Direitos</a>
-            <a href="{{basePath}}/discursos/categoria/Educação & Trabalho" class="badge rounded-pill text-white px-3 py-2" style="background-color: #2ECC71;">Educação & Trabalho</a>
-            <a href="{{basePath}}/discursos/categoria/UX e Tecnologia" class="badge rounded-pill text-white px-3 py-2" style="background-color: #F1C40F;">UX e Tecnologia</a>
-            <a href="{{basePath}}/discursos/categoria/Direitos Trabalhistas" class="badge rounded-pill text-white px-3 py-2" style="background-color: #3498DB;">Direitos Trabalhistas</a>
+            <a href="{{@root.basePath}}/discursos/categoria/Segurança Pública" class="badge rounded-pill text-white px-3 py-2" style="background-color: #FF5733;">Segurança Pública</a>
+            <a href="{{@root.basePath}}/discursos/categoria/Diversidade" class="badge rounded-pill text-white px-3 py-2" style="background-color: #E67E22;">Diversidade</a>
+            <a href="{{@root.basePath}}/discursos/categoria/Violência e Direitos" class="badge rounded-pill text-white px-3 py-2" style="background-color: #9B59B6;">Violência e Direitos</a>
+            <a href="{{@root.basePath}}/discursos/categoria/Educação & Trabalho" class="badge rounded-pill text-white px-3 py-2" style="background-color: #2ECC71;">Educação & Trabalho</a>
+            <a href="{{@root.basePath}}/discursos/categoria/UX e Tecnologia" class="badge rounded-pill text-white px-3 py-2" style="background-color: #F1C40F;">UX e Tecnologia</a>
+            <a href="{{@root.basePath}}/discursos/categoria/Direitos Trabalhistas" class="badge rounded-pill text-white px-3 py-2" style="background-color: #3498DB;">Direitos Trabalhistas</a>
         </div>
     </section>
 </div>

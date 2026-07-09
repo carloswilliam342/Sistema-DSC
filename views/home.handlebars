@@ -5,16 +5,16 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light shadow-sm navbar-transparent">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="{{#if usuario}}/dashboard{{else}}/{{/if}}">DSC</a>
+        <a class="navbar-brand fw-bold" href="{{#if usuario}}{{@root.basePath}}/dashboard{{else}}{{@root.basePath}}/{{/if}}">DSC</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto align-items-center">
-                <li class="nav-item"><a class="nav-link" href="{{basePath}}/">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{basePath}}/sobre">Sobre o DSC</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{basePath}}/como-funciona">Como funciona</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{basePath}}/recursos">Recursos</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{@root.basePath}}/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{@root.basePath}}/sobre">Sobre o DSC</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{@root.basePath}}/como-funciona">Como funciona</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{@root.basePath}}/recursos">Recursos</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Contato</a></li>
             </ul>
             {{#if usuario}}
@@ -26,16 +26,16 @@
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Perfil</a></li>
-                    <li><a class="dropdown-item" href="{{basePath}}/discursos/favoritos"><i class="fas fa-heart me-2"></i>Meus Favoritos</a></li>
+                    <li><a class="dropdown-item" href="{{@root.basePath}}/discursos/favoritos"><i class="fas fa-heart me-2"></i>Meus Favoritos</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="{{basePath}}/logout"><i class="fas fa-sign-out-alt me-2"></i>Sair</a></li>
+                    <li><a class="dropdown-item" href="{{@root.basePath}}/logout"><i class="fas fa-sign-out-alt me-2"></i>Sair</a></li>
                 </ul>
             </div>
             {{else}}
             <!-- Usuário não logado: mostra botões de login/registro -->
             <div class="d-flex ms-lg-3">
-                <a href="{{basePath}}/login" class="btn btn-outline-primary me-2">Login</a>
-                <a href="{{basePath}}/registro" class="btn btn-primary">Registrar-se</a>
+                <a href="{{@root.basePath}}/login" class="btn btn-outline-primary me-2">Login</a>
+                <a href="{{@root.basePath}}/registro" class="btn btn-primary">Registrar-se</a>
             </div>
             {{/if}}
         </div>
@@ -141,12 +141,12 @@
                     </h1>
                     <p>A solução ideal para análise de pesquisas qualitativas</p>
                     <div class="mt-4">
-                        <a href="{{basePath}}/sobre" class="btn btn-light me-2">Saiba mais</a>
-                        <a href="{{basePath}}/registro" class="btn btn-outline-light">Comece agora</a>
+                        <a href="{{@root.basePath}}/sobre" class="btn btn-light me-2">Saiba mais</a>
+                        <a href="{{@root.basePath}}/registro" class="btn btn-outline-light">Comece agora</a>
                     </div>
                 </div>
                 <div class="col-md-6 text-end">
-                    <img src="{{basePath}}/images/student.png" alt="Estudante" class="img-fluid" style="max-height: 500px;">
+                    <img src="{{@root.basePath}}/images/student.png" alt="Estudante" class="img-fluid" style="max-height: 500px;">
                 </div>
             </div>
         </div>
@@ -156,7 +156,7 @@
     <section class="text-center py-5">
         <h2 class="fw-bold">Objetivo geral</h2>
         <p>Conheça o Discurso do Sujeito Coletivo e utilize o DSC@IFMA para potencializar suas pesquisas</p>
-        <a href="{{basePath}}/como-funciona" class="btn btn-primary">Leia mais</a>
+        <a href="{{@root.basePath}}/como-funciona" class="btn btn-primary">Leia mais</a>
     </section>
 
     {{!-- Seção Funcionalidades --}}
@@ -167,21 +167,21 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="card p-4 h-100 card-equal">
-                        <img src="{{basePath}}/icons/data.png" class="mb-3 img-responsive mx-auto text-center" width="50" alt="Processamento de dados">
+                        <img src="{{@root.basePath}}/icons/data.png" class="mb-3 img-responsive mx-auto text-center" width="50" alt="Processamento de dados">
                         <h5>Processamento de Dados</h5>
                         <p>Organize e processe dados qualitativos com eficiência.</p>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card p-4 h-100 card-equal">
-                        <img src="{{basePath}}/icons/research.png" class="mb-3 img-responsive mx-auto text-center" width="50" alt="Cadastro de pesquisas">
+                        <img src="{{@root.basePath}}/icons/research.png" class="mb-3 img-responsive mx-auto text-center" width="50" alt="Cadastro de pesquisas">
                         <h5>Cadastro de Pesquisas</h5>
                         <p>Cadastre pesquisas, perguntas e entrevistados.</p>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card p-4 h-100 card-equal">
-                        <img src="{{basePath}}/icons/results.png" class="mb-3 img-responsive mx-auto text-center" width="50" alt="Produtos finais">
+                        <img src="{{@root.basePath}}/icons/results.png" class="mb-3 img-responsive mx-auto text-center" width="50" alt="Produtos finais">
                         <h5>Produtos Finais</h5>
                         <p>Visualize discursos gerados e seus relatórios.</p>
                     </div>
@@ -195,7 +195,7 @@
         <h3>O que é o <span class="text-primary">DSC?</span></h3>
         <p>O Discurso do Sujeito Coletivo é um método de processamento de questões abertas em pesquisas de opinião ou representação social. Ele foi desenvolvido no ano 2000 na Universidade de São Paulo por Fernando Lefevre e  Ana Maria Cavalcanti Lefevre e vem sendo usado desde essa época, em todo tipo de pesquisa em que esteja presente um tema e populações  que o representam  na forma de narrações coletivas  expressando uma dada representação e redigidas na primeira pessoa do singular</p>
     </section>
-     <img src="{{basePath}}/images/dsc-image1.png" class="img-fluid rounded mx-auto d-block"  alt="Imagem representando o DSC"  style="max-height: 300px";>
+     <img src="{{@root.basePath}}/images/dsc-image1.png" class="img-fluid rounded mx-auto d-block"  alt="Imagem representando o DSC"  style="max-height: 300px";>
         </section>
 
         <section class="container my-5">
@@ -203,10 +203,10 @@
                 <div class="col-md-6">
                     <h3 class="text-primary">Tudo o que você precisa para transformar dados em discursos significativos, você encontra no <span class="text-success">DSC@IFMA</span></h3>
                     <p>O software DSC@IFMA oferece uma solução completa para gerenciar pesquisas qualitativas, desde o cadastro de perguntas e entrevistados até a geração de discursos do sujeito coletivo com quantificações precisas, tudo em um sistema intuitivo e eficiente.</p>
-                    <a href="{{basePath}}/sobre" class="btn btn-link">Saiba mais sobre o DSC</a>
+                    <a href="{{@root.basePath}}/sobre" class="btn btn-link">Saiba mais sobre o DSC</a>
                 </div>
                 <div class="col-md-6 text-end">
-                    <img src="{{basePath}}/images/dsc-image2.png" class="img-fluid" alt="Pesquisa qualitativa" style="max-height: 300px";>
+                    <img src="{{@root.basePath}}/images/dsc-image2.png" class="img-fluid" alt="Pesquisa qualitativa" style="max-height: 300px";>
                 </div>
             </div>
         </section>
@@ -219,22 +219,22 @@
         <section class="container my-5">
             <div class="row align-items-center">
                 <div class="col-md-6">
-                    <img src="{{basePath}}/images/teamwork.png" class="img-fluid" alt="Trabalho em equipe" style="max-height: 300px";>
+                    <img src="{{@root.basePath}}/images/teamwork.png" class="img-fluid" alt="Trabalho em equipe" style="max-height: 300px";>
                 </div>
                 <div class="col-md-6">
                     <h3 class="text-primary">O  <span class="text-success">DSC@IFMA</span> facilita o trabalho em equipe ao transformar respostas individuais em discursos coletivos com clareza e eficiência</h3>
                    <div class="d-flex align-items-start mb-3">
-                        <img src="{{basePath}}/images/icon1.png" alt="Ícone 1" class="me-3" style="width: 40px;">
+                        <img src="{{@root.basePath}}/images/icon1.png" alt="Ícone 1" class="me-3" style="width: 40px;">
                         <p><strong>Gestão intuitiva de dados:</strong> Cadastre pesquisas, perguntas e participantes de forma simples e organizada.</p>
                    </div>
 
                    <div class="d-flex align-items-start mb-3">
-                        <img src="{{basePath}}/images/icon2.png" alt="Ícone 2" class="me-3" style="width: 40px;">
+                        <img src="{{@root.basePath}}/images/icon2.png" alt="Ícone 2" class="me-3" style="width: 40px;">
                         <p><strong>Processamento visual e interativo:</strong> Veja todas as etapas do processamento do DSC em quadros detalhados e conectados.</p>
                    </div>
 
                    <div class="d-flex align-items-start">
-                        <img src="{{basePath}}/images/icon3.png" alt="Ícone 3" class="me-3" style="width: 40px;">
+                        <img src="{{@root.basePath}}/images/icon3.png" alt="Ícone 3" class="me-3" style="width: 40px;">
                         <p><strong>Resultados claros:</strong> Acesse discursos coletivos e suas quantificações em relatórios prontos para análise.</p>
                    </div>
 
@@ -250,14 +250,14 @@
                 <p>O DSC@IFMA oferece um conjunto dinâmico de ferramentas para facilitar a análise de discursos coletivos, permitindo que pesquisadores transformem dados em insights com precisão.</p>
             </div>
             <div class="col-md-6 text-end">
-                <img src="{{basePath}}/images/ferramentas.jpg" alt="Pesquisadores e Estudantes" class="img-fluid rounded" style="max-height: 250px">
+                <img src="{{@root.basePath}}/images/ferramentas.jpg" alt="Pesquisadores e Estudantes" class="img-fluid rounded" style="max-height: 250px">
             </div>
         </div>
 
         <!-- Segunda Seção -->
         <div class="row align-items-center mb-5">
             <div class="col-md-6 text-start">
-                <img src="{{basePath}}/images/questionario.png" alt="Criação e gerenciamento de questionários" class="img-fluid rounded" style="max-height: 300px">
+                <img src="{{@root.basePath}}/images/questionario.png" alt="Criação e gerenciamento de questionários" class="img-fluid rounded" style="max-height: 300px">
             </div>
             <div class="col-md-6">
                 <h3>Criação e <span style="color: #38B6FF;">gerenciamento de questionários</span></h3>
@@ -276,14 +276,14 @@
                 <p>O DSC@IFMA oferece ferramentas para gerenciar a coleta de discursos, analisar dados e sintetizar narrativas coletivas. Professores podem visualizar rapidamente as respostas dos alunos e gerar discursos coletivos com base em padrões identificados.</p>
             </div>
             <div class="col-md-6 text-end">
-                <img src="{{basePath}}/images/analise-dados.jpg" alt="Gestão de Coleta e Análise de Dados" class="img-fluid rounded" style="max-height: 250px">
+                <img src="{{@root.basePath}}/images/analise-dados.jpg" alt="Gestão de Coleta e Análise de Dados" class="img-fluid rounded" style="max-height: 250px">
             </div>
         </div>
 
         <!-- Quarta Seção -->
         <div class="row align-items-center mb-5">
             <div class="col-md-6 text-start">
-                <img src="{{basePath}}/images/segmentacao.png" alt="Discussões por Segmentação" class="img-fluid rounded" style="max-height: 250px">
+                <img src="{{@root.basePath}}/images/segmentacao.png" alt="Discussões por Segmentação" class="img-fluid rounded" style="max-height: 250px">
             </div>
             <div class="col-md-6">
                 <h3>Discussões por <span style="color: #38B6FF;">Segmentação</span></h3>
@@ -302,14 +302,14 @@
         <div class="col-12">
             <h4><i class="bi bi-folder"></i> Escolha uma categoria</h4>
             <div class="d-flex flex-wrap gap-2">
-                <a href="{{basePath}}/discursos/categoria/Educação" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #FF5733;">Educação</a>
-                <a href="{{basePath}}/discursos/categoria/Sustentabilidade" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #E67E22;">Sustentabilidade</a>
-                <a href="{{basePath}}/discursos/categoria/Inovação Social" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #9B59B6;">Inovação Social</a>
-                <a href="{{basePath}}/discursos/categoria/Saúde" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #2ECC71;">Saúde</a>
-                <a href="{{basePath}}/discursos/categoria/Vulnerabilidades" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #F1C40F;">Vulnerabilidades</a>
-                <a href="{{basePath}}/discursos/categoria/Direitos Humanos" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #3498DB;">Direitos Humanos</a>
-                <a href="{{basePath}}/discursos/categoria/Política" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #1ABC9C;">Política</a>
-                <a href="{{basePath}}/discursos/categoria/DSC" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #3498DB;">DSC</a>
+                <a href="{{@root.basePath}}/discursos/categoria/Educação" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #FF5733;">Educação</a>
+                <a href="{{@root.basePath}}/discursos/categoria/Sustentabilidade" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #E67E22;">Sustentabilidade</a>
+                <a href="{{@root.basePath}}/discursos/categoria/Inovação Social" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #9B59B6;">Inovação Social</a>
+                <a href="{{@root.basePath}}/discursos/categoria/Saúde" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #2ECC71;">Saúde</a>
+                <a href="{{@root.basePath}}/discursos/categoria/Vulnerabilidades" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #F1C40F;">Vulnerabilidades</a>
+                <a href="{{@root.basePath}}/discursos/categoria/Direitos Humanos" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #3498DB;">Direitos Humanos</a>
+                <a href="{{@root.basePath}}/discursos/categoria/Política" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #1ABC9C;">Política</a>
+                <a href="{{@root.basePath}}/discursos/categoria/DSC" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #3498DB;">DSC</a>
             </div>
         </div>
     </div>
@@ -317,7 +317,7 @@
 
 <!-- Botão "VER TODAS" para a primeira seção de categorias -->
 <div class="container text-end mt-2">
-    <a href="{{basePath}}/discursos" class="text-primary fw-bold text-decoration-none">VER TODAS →</a>
+    <a href="{{@root.basePath}}/discursos" class="text-primary fw-bold text-decoration-none">VER TODAS →</a>
 </div>
 
 <div class="container my-5 p-4 rounded" style="background-color: rgba(173, 216, 230, 0.3);">
@@ -326,13 +326,13 @@
         <div class="col-12">
             <h4><i class="bi bi-folder"></i> Escolha uma categoria</h4>
             <div class="d-flex flex-wrap gap-2">
-                <a href="{{basePath}}/discursos/categoria/Participação pública" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #FF5733;">Participação Pública</a>
-                <a href="{{basePath}}/discursos/categoria/Vulnerabilidade Urbana" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #E67E22;">Vulnerabilidade Urbana</a>
-                <a href="{{basePath}}/discursos/categoria/Tecnologia & Sociedade" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #9B59B6;">Tecnologia & Sociedade</a>
-                <a href="{{basePath}}/discursos/categoria/Tecnologia" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #9B59B6;">Tecnologia</a>
-                <a href="{{basePath}}/discursos/categoria/Ética e Justiça" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #2ECC71;">Ética e Justiça</a>
-                <a href="{{basePath}}/discursos/categoria/Saúde mental" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #F1C40F;">Saúde Mental</a>
-                <a href="{{basePath}}/discursos/categoria/Empreendedorismo" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #3498DB;">Empreendedorismo</a>
+                <a href="{{@root.basePath}}/discursos/categoria/Participação pública" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #FF5733;">Participação Pública</a>
+                <a href="{{@root.basePath}}/discursos/categoria/Vulnerabilidade Urbana" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #E67E22;">Vulnerabilidade Urbana</a>
+                <a href="{{@root.basePath}}/discursos/categoria/Tecnologia & Sociedade" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #9B59B6;">Tecnologia & Sociedade</a>
+                <a href="{{@root.basePath}}/discursos/categoria/Tecnologia" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #9B59B6;">Tecnologia</a>
+                <a href="{{@root.basePath}}/discursos/categoria/Ética e Justiça" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #2ECC71;">Ética e Justiça</a>
+                <a href="{{@root.basePath}}/discursos/categoria/Saúde mental" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #F1C40F;">Saúde Mental</a>
+                <a href="{{@root.basePath}}/discursos/categoria/Empreendedorismo" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #3498DB;">Empreendedorismo</a>
             </div>
         </div>
     </div>
@@ -340,7 +340,7 @@
 
 <!-- Botão "VER TODAS" para a segunda seção de categorias -->
 <div class="container text-end mt-2">
-    <a href="{{basePath}}/discursos" class="text-primary fw-bold text-decoration-none">VER TODAS →</a>
+    <a href="{{@root.basePath}}/discursos" class="text-primary fw-bold text-decoration-none">VER TODAS →</a>
 </div>
 
 <div class="container my-5 p-4 rounded" style="background-color: rgba(173, 216, 230, 0.3);">
@@ -349,12 +349,12 @@
         <div class="col-12">
             <h4><i class="bi bi-folder"></i> Escolha uma categoria</h4>
             <div class="d-flex flex-wrap gap-2">
-                <a href="{{basePath}}/discursos/categoria/Segurança Pública" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #FF5733;">Segurança Pública</a>
-                <a href="{{basePath}}/discursos/categoria/diversidade" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #E67E22;">Diversidade</a>
-                <a href="{{basePath}}/discursos/categoria/Violência e direitos" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #9B59B6;">Violência e Direitos</a>
-                <a href="{{basePath}}/discursos/categoria/Educação & Trabalho" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #2ECC71;">Educação & Trabalho</a>
-                <a href="{{basePath}}/discursos/categoria/UX e Tecnologia" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #F1C40F;">UX e Tecnologia</a>
-                <a href="{{basePath}}/discursos/categoria/Direitos Trabalhistas" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #3498DB;">Direitos Trabalhistas</a>
+                <a href="{{@root.basePath}}/discursos/categoria/Segurança Pública" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #FF5733;">Segurança Pública</a>
+                <a href="{{@root.basePath}}/discursos/categoria/diversidade" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #E67E22;">Diversidade</a>
+                <a href="{{@root.basePath}}/discursos/categoria/Violência e direitos" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #9B59B6;">Violência e Direitos</a>
+                <a href="{{@root.basePath}}/discursos/categoria/Educação & Trabalho" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #2ECC71;">Educação & Trabalho</a>
+                <a href="{{@root.basePath}}/discursos/categoria/UX e Tecnologia" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #F1C40F;">UX e Tecnologia</a>
+                <a href="{{@root.basePath}}/discursos/categoria/Direitos Trabalhistas" class="badge rounded-pill text-white px-3 py-2 cursor-pointer text-decoration-none" style="background-color: #3498DB;">Direitos Trabalhistas</a>
             </div>
         </div>
     </div>
@@ -362,7 +362,7 @@
 
 <!-- Botão "VER TODAS" para a terceira seção de categorias -->
 <div class="container text-end mt-2">
-    <a href="{{basePath}}/discursos" class="text-primary fw-bold text-decoration-none">VER TODAS →</a>
+    <a href="{{@root.basePath}}/discursos" class="text-primary fw-bold text-decoration-none">VER TODAS →</a>
 </div>
 
 <div class="container my-5">
@@ -376,16 +376,16 @@
             <p> E você? Como o DSC impactou sua pesquisa ou sala de aula? Compartilhe sua experiência conosco! </p>
             {{!-- Botão para enviar depoimento (disponível para todos os usuários autenticados) --}}
             {{#if usuario}}
-            <a href="{{basePath}}/depoimentos/enviar" class="btn btn-outline-success">Enviar Depoimento</a>
+            <a href="{{@root.basePath}}/depoimentos/enviar" class="btn btn-outline-success">Enviar Depoimento</a>
             {{/if}}
 
             {{!-- Botão para pesquisadores --}}
             {{#if (eq usuario.tipoUsuario "PESQUISADOR")}}
-            <a href="{{basePath}}/depoimentos" class="btn btn-outline-primary">Ver Depoimentos</a>
+            <a href="{{@root.basePath}}/depoimentos" class="btn btn-outline-primary">Ver Depoimentos</a>
             {{/if}}
         </div>
         <div class="col-md-6 position-relative">
-            <img src="{{basePath}}/images/imagem-de-depoimento.jpg" class="img-fluid rounded shadow w-100" alt="Pessoa dando depoimento" style="max-height: 450px;">
+            <img src="{{@root.basePath}}/images/imagem-de-depoimento.jpg" class="img-fluid rounded shadow w-100" alt="Pessoa dando depoimento" style="max-height: 450px;">
             <div class="depoimento-box position-absolute bg-white p-3 shadow rounded" style="bottom: 10%; left: 10%; max-width: 80%;">
                 <p class="mb-1">"O DSC mudou completamente a forma como entendemos as opiniões coletivas. É como se cada palavra contribuísse para uma visão mais completa e humanizada."</p>
                 <strong>Maria Fernanda</strong>
@@ -416,7 +416,7 @@
                     <p class="text-muted small">
                         Estudos recentes mostram que o Discurso do Sujeito Coletivo (DSC) tem facilitado a análise de dados qualitativos, promovendo maior compreensão das opiniões coletivas em pesquisas acadêmicas.
                     </p>
-                    <a href="{{basePath}}/discursos/categoria/dsc" class="text-primary fw-bold text-decoration-none">Ler mais</a>
+                    <a href="{{@root.basePath}}/discursos/categoria/dsc" class="text-primary fw-bold text-decoration-none">Ler mais</a>
                 </div>
             </div>
         </div>

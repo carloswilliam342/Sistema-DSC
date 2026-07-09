@@ -32,16 +32,16 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
     <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="{{#if usuario}}/dashboard{{else}}/{{/if}}">DSC</a>
+        <a class="navbar-brand fw-bold" href="{{#if usuario}}{{@root.basePath}}/dashboard{{else}}{{@root.basePath}}/{{/if}}">DSC</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto align-items-center">
-                <li class="nav-item"><a class="nav-link" href="{{basePath}}/">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{basePath}}/sobre">Sobre o DSC</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{basePath}}/como-funciona">Como funciona</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{basePath}}/recursos">Recursos</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{@root.basePath}}/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{@root.basePath}}/sobre">Sobre o DSC</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{@root.basePath}}/como-funciona">Como funciona</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{@root.basePath}}/recursos">Recursos</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Contato</a></li>
             </ul>
         </div>
@@ -54,10 +54,10 @@
         <div class="col-12 col-md-6 mb-4 mb-md-0">
             <h1 class="fw-bold text-primary">Por que o DSC é Essencial para Análises Acadêmicas e Pesquisas Qualitativas</h1>
             <p class="text-muted">O Discurso do Sujeito Coletivo (DSC) é uma metodologia poderosa para transformar opiniões em discursos representativos, facilitando a análise qualitativa e promovendo insights profundos em pesquisas acadêmicas. Com o DSC@IFMA, você pode criar discursos coletivos de forma prática, dinâmica e eficiente. Descubra como esta ferramenta pode revolucionar seus projetos e trabalhos acadêmicos.</p>
-            <a href="{{basePath}}/acessar-beneficios" class="btn btn-success">Saiba Mais Agora</a>
+            <a href="{{@root.basePath}}/acessar-beneficios" class="btn btn-success">Saiba Mais Agora</a>
         </div>
         <div class="col-12 col-md-6 text-center">
-            <img src="{{basePath}}/images/noticia-principal.jpg" class="img-fluid rounded" alt="Imagem DSC">
+            <img src="{{@root.basePath}}/images/noticia-principal.jpg" class="img-fluid rounded" alt="Imagem DSC">
         </div>
     </section>
     
@@ -70,12 +70,12 @@
                 {{#each discursos}}
                 <div class="col-12 col-md-4 mb-4">
                     <div class="card shadow-sm h-100">
-                        <img src="{{#if this.imagem}}{{withBase this.imagem}}{{else}}{{basePath}}/uploads/imagens-discursos/default.png{{/if}}" 
+                        <img src="{{#if this.imagem}}{{withBase this.imagem}}{{else}}{{@root.basePath}}/uploads/imagens-discursos/default.png{{/if}}" 
                              class="card-img-top" alt="Imagem do Discurso">
                         <div class="card-body">
                             <h5 class="card-title">{{this.titulo}}</h5>
                             <p class="card-text text-muted">{{{truncate this.descricao 100}}}</p>
-                            <a href="{{basePath}}/discursos/{{this.id}}" class="btn btn-primary">Ver mais</a>
+                            <a href="{{@root.basePath}}/discursos/{{this.id}}" class="btn btn-primary">Ver mais</a>
                         </div>
                     </div>
                 </div>
@@ -92,25 +92,25 @@
         <div class="row">
             <div class="col-12 col-md-6 mb-4 mb-md-0">
                 <div class="card shadow-sm h-100">
-                    <img src="{{basePath}}/images/user-feedback.png" class="card-img-top" alt="Feedback do usuário">
+                    <img src="{{@root.basePath}}/images/user-feedback.png" class="card-img-top" alt="Feedback do usuário">
                     <div class="card-body">
                         <p class="card-text fw-bold">"O que você pensa sobre o uso do DSC?"</p>
                         <p><strong>Total de respostas:</strong> 120</p>
                         <p><strong>Palavras-chave frequentes:</strong> "colaboração", "eficaz", "complexo"</p>
                         <p><strong>Status:</strong> Processado</p>
-                        <a href="{{basePath}}/discursos" class="text-primary">Ver detalhes</a>
+                        <a href="{{@root.basePath}}/discursos" class="text-primary">Ver detalhes</a>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-md-6">
                 <div class="card shadow-sm h-100">
-                    <img src="{{basePath}}/images/noticia-principal.jpg" class="card-img-top" alt="Impacto do DSC">
+                    <img src="{{@root.basePath}}/images/noticia-principal.jpg" class="card-img-top" alt="Impacto do DSC">
                     <div class="card-body">
                         <p class="card-text fw-bold">"Como o DSC tem impactado os projetos dos pesquisadores?"</p>
                         <p><strong>Total de respostas:</strong> 120</p>
                         <p><strong>Palavras-chave frequentes:</strong> "prático", "intuitivo", "complexo"</p>
                         <p><strong>Status:</strong> Processado</p>
-                        <a href="{{basePath}}/discursos" class="text-primary">Ver detalhes</a>
+                        <a href="{{@root.basePath}}/discursos" class="text-primary">Ver detalhes</a>
                     </div>
                 </div>
             </div>
@@ -121,13 +121,13 @@
     <section class="container-fluid my-5">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
             <h2 class="mb-3 mb-md-0">Análise por grupos</h2>
-            <a href="{{basePath}}/discursos" class="text-primary">Ver tudo</a>
+            <a href="{{@root.basePath}}/discursos" class="text-primary">Ver tudo</a>
         </div>
 
         <div class="row mt-3">
             <div class="col-12 col-sm-6 col-md-3 mb-4">
                 <div class="card shadow-sm h-100">
-                    <img src="{{basePath}}/images/educacao2.png" class="card-img-top" alt="Educação Transformadora">
+                    <img src="{{@root.basePath}}/images/educacao2.png" class="card-img-top" alt="Educação Transformadora">
                     <div class="card-body">
                         <h5 class="card-title">Educação Transformadora</h5>
                         <p class="card-text">As respostas deste grupo destacam como o DSC promove a inovação em práticas educacionais.</p>
@@ -136,7 +136,7 @@
             </div>
             <div class="col-12 col-sm-6 col-md-3 mb-4">
                 <div class="card shadow-sm h-100">
-                    <img src="{{basePath}}/images/barreiras.png" class="card-img-top" alt="Barreiras à Implementação">
+                    <img src="{{@root.basePath}}/images/barreiras.png" class="card-img-top" alt="Barreiras à Implementação">
                     <div class="card-body">
                         <h5 class="card-title">Barreiras à Implementação</h5>
                         <p class="card-text">Este grupo aborda as dificuldades enfrentadas para implementar a metodologia DSC.</p>
@@ -145,7 +145,7 @@
             </div>
             <div class="col-12 col-sm-6 col-md-3 mb-4">
                 <div class="card shadow-sm h-100">
-                    <img src="{{basePath}}/images/impacto.png" class="card-img-top" alt="Impacto do DSC nas Escolas">
+                    <img src="{{@root.basePath}}/images/impacto.png" class="card-img-top" alt="Impacto do DSC nas Escolas">
                     <div class="card-body">
                         <h5 class="card-title">Impacto do DSC nas Escolas</h5>
                         <p class="card-text">Este grupo foi criado para discutir os efeitos do DSC na educação.</p>
@@ -154,7 +154,7 @@
             </div>
             <div class="col-12 col-sm-6 col-md-3 mb-4">
                 <div class="card shadow-sm h-100">
-                    <img src="{{basePath}}/images/facilidade.png" class="card-img-top" alt="Como o DSC pode facilitar seu projeto">
+                    <img src="{{@root.basePath}}/images/facilidade.png" class="card-img-top" alt="Como o DSC pode facilitar seu projeto">
                     <div class="card-body">
                         <h5 class="card-title">Como o DSC pode facilitar seu projeto</h5>
                         <p class="card-text">Neste grupo, discutimos como o DSC pode otimizar pesquisas universitárias.</p>

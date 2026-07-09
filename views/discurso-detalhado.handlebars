@@ -6,16 +6,16 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="{{basePath}}/dashboard">DSC</a>
+        <a class="navbar-brand fw-bold" href="{{@root.basePath}}/dashboard">DSC</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto align-items-center">
-                <li class="nav-item"><a class="nav-link" href="{{basePath}}/">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{basePath}}/sobre">Sobre o DSC</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{basePath}}/como-funciona">Como funciona</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{basePath}}/recursos">Recursos</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{@root.basePath}}/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{@root.basePath}}/sobre">Sobre o DSC</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{@root.basePath}}/como-funciona">Como funciona</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{@root.basePath}}/recursos">Recursos</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Contato</a></li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -24,9 +24,9 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Perfil</a></li>
-                        <li><a class="dropdown-item" href="{{basePath}}/discursos/favoritos"><i class="fas fa-heart me-2"></i>Meus Favoritos</a></li>
+                        <li><a class="dropdown-item" href="{{@root.basePath}}/discursos/favoritos"><i class="fas fa-heart me-2"></i>Meus Favoritos</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="{{basePath}}/logout"><i class="fas fa-sign-out-alt me-2"></i>Sair</a></li>
+                        <li><a class="dropdown-item" href="{{@root.basePath}}/logout"><i class="fas fa-sign-out-alt me-2"></i>Sair</a></li>
                     </ul>
                 </li>
             </ul>
@@ -36,7 +36,7 @@
 
 <div class="container mt-5">
     <div class="card shadow-sm">
-        <img src="{{#if discurso.imagem}}{{withBase discurso.imagem}}{{else}}{{basePath}}/uploads/imagens-discursos/default.png{{/if}}" 
+        <img src="{{#if discurso.imagem}}{{withBase discurso.imagem}}{{else}}{{@root.basePath}}/uploads/imagens-discursos/default.png{{/if}}" 
         class="card-img-top" style="height: 300px; object-fit: cover;" alt="Imagem do Discurso">
         <div class="card-body">
             <h1 class="card-title">{{discurso.titulo}}</h1>
@@ -44,7 +44,7 @@
             <p class="card-text">{{{discurso.descricao}}}</p>
             <small class="text-muted">Criado em: {{formatDate discurso.dataCriacao}}</small>
             <div class="mt-4">
-                <a href="{{basePath}}/discursos/categoria/{{discurso.categoria}}" class="btn btn-secondary">Voltar</a>
+                <a href="{{@root.basePath}}/discursos/categoria/{{discurso.categoria}}" class="btn btn-secondary">Voltar</a>
             </div>
         </div>
     </div>

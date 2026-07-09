@@ -5,16 +5,16 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="{{basePath}}/dashboard">DSC</a>
+        <a class="navbar-brand fw-bold" href="{{@root.basePath}}/dashboard">DSC</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto align-items-center">
-                <li class="nav-item"><a class="nav-link" href="{{basePath}}/">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{basePath}}/sobre">Sobre o DSC</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{basePath}}/como-funciona">Como funciona</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{basePath}}/recursos">Recursos</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{@root.basePath}}/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{@root.basePath}}/sobre">Sobre o DSC</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{@root.basePath}}/como-funciona">Como funciona</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{@root.basePath}}/recursos">Recursos</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Contato</a></li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -23,9 +23,9 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Perfil</a></li>
-                        <li><a class="dropdown-item" href="{{basePath}}/discursos/favoritos"><i class="fas fa-heart me-2"></i>Meus Favoritos</a></li>
+                        <li><a class="dropdown-item" href="{{@root.basePath}}/discursos/favoritos"><i class="fas fa-heart me-2"></i>Meus Favoritos</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="{{basePath}}/logout"><i class="fas fa-sign-out-alt me-2"></i>Sair</a></li>
+                        <li><a class="dropdown-item" href="{{@root.basePath}}/logout"><i class="fas fa-sign-out-alt me-2"></i>Sair</a></li>
                     </ul>
                 </li>
             </ul>
@@ -104,7 +104,7 @@
       <p class="text-muted">
         Os usuários devem detalhar o objetivo da sessão, os temas a serem explorados ou o tipo de discursos que serão analisados.
       </p>
-      <form action="{{basePath}}/analise" method="POST" class="p-4 bg-light rounded shadow-sm">
+      <form action="{{@root.basePath}}/analise" method="POST" class="p-4 bg-light rounded shadow-sm">
         <div class="mb-3">
           <label for="titulo" class="form-label">Título do estudo</label>
           <input type="text" id="titulo" name="titulo" class="form-control" placeholder="Digite o título do estudo" required>
