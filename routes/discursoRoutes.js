@@ -1,28 +1,10 @@
 import express from "express";
 import { checkAuth } from "./auth.js";
 import multer from "multer";
-import path from "path";
-import { processarDiscurso, uploadMiddleware, baixarDiscurso, baixarRelatorio } from "../controllers/criarDiscursoController.js";
-
-import fs from "fs";
-
-const uploadPath = "uploads/discursos-criados";
-if (!fs.existsSync(uploadPath)) {
-    fs.mkdirSync(uploadPath, { recursive: true });
-}
+import { baixarDiscurso, baixarRelatorio } from "../controllers/criarDiscursoController.js";
+import { analisarPesquisa, listarPesquisas, obterPesquisa, gerarPesquisa, importarDepoimento, exportarPesquisa } from "../controllers/pesquisaDscController.js";
 
 const router = express.Router();
-
-// Configuração do multer para salvar arquivos
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "uploads/discursos-criados");
-    },
-    filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-        cb(null, uniqueSuffix + path.extname(file.originalname));
-    }
-});
 
 // Validação dos tipos de arquivo permitidos
 const fileFilter = (req, file, cb) => {
@@ -37,16 +19,26 @@ const fileFilter = (req, file, cb) => {
     cb(null, true);
 };
 
-const upload = multer({ dest: "uploads/discursos-criados", fileFilter });
-
-
 // Rota para renderizar a página de criar discurso
 router.get("/", checkAuth, (req, res) => {
-    res.render("criar-discurso");
+    res.render("pesquisa-dsc");
 });
 
+router.get("/historico", checkAuth, (req, res) => res.render("pesquisa-dsc", { historico: true }));
+router.get("/api/pesquisas", checkAuth, listarPesquisas);
+router.get("/api/pesquisas/:id", checkAuth, obterPesquisa);
+router.get("/api/pesquisas/:id/pdf", checkAuth, exportarPesquisa);
+router.post("/api/pesquisas", checkAuth, express.json({ limit: "1mb" }), analisarPesquisa);
+router.post("/api/pesquisas/:id/gerar", checkAuth, express.json({ limit: "1mb" }), gerarPesquisa);
+const importUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024, files: 1 }, fileFilter });
+router.post("/api/importar", checkAuth, (req, res, next) => importUpload.single("arquivo")(req, res, error => {
+    if (error) return res.status(400).json({ erro: error.code === "LIMIT_FILE_SIZE" ? "O arquivo deve ter até 5 MB." : "Envie apenas um arquivo TXT, DOCX ou PDF." });
+    next();
+}), importarDepoimento);
+
 // Rota para processar o discurso
-router.post("/transformar", checkAuth, upload.single("arquivo"), processarDiscurso);
+// O fluxo antigo não exigia categorias nem revisão e não possuía histórico.
+router.post("/transformar", checkAuth, (req, res) => res.status(410).json({ erro: "A geração agora é feita pelo fluxo em etapas de Criar Discurso: categorias, respondentes, depoimentos e revisão." }));
 
 // Rota para download do discurso convertendo para PDF
 router.get("/download/:filename", checkAuth, baixarDiscurso);

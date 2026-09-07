@@ -33,7 +33,7 @@ const router = express.Router();
 
 // Interpretando dados do formulário
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json()); // Processa JSON
+app.use(express.json({ limit: "1mb" })); // Entrevistas estruturadas com vários respondentes
 
 app.use(cors());
 

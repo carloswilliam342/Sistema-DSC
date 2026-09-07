@@ -38,6 +38,13 @@ describe("ClientGemini (retry)", () => {
     expect(mockGenerate).toHaveBeenCalledTimes(1);
   });
 
+  it("encaminha configuração estruturada quando solicitada pelo fluxo DSC", async () => {
+    mockGenerate.mockResolvedValue({ text: '{"discursos":[]}' });
+    const config = { responseMimeType: "application/json", temperature: 0.2, httpOptions: { timeout: 60000 } };
+    await ClientGemini("prompt", config);
+    expect(mockGenerate).toHaveBeenCalledWith({ model: "gemini-2.5-flash", contents: "prompt", config });
+  });
+
   it("tenta novamente após erro 503 e retorna na segunda tentativa", async () => {
     mockGenerate
       .mockRejectedValueOnce(erroComStatus(503))

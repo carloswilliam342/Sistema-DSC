@@ -99,6 +99,23 @@ npm start
 ```
 Acesse **http://localhost:3000**.
 
+### Fluxo de criação de DSC
+
+Em **Criar Discurso**, preencha as etapas: categorias e pergunta, respondentes,
+depoimentos e revisão da análise. A IA sugere expressões-chave, ideias centrais
+e categorias; o pesquisador pode corrigir os vínculos antes de gerar.
+Cada categoria recebe um DSC inteiro de até **10 palavras**, ou uma pendência
+quando não houver evidência suficiente. Os resultados permitem consultar
+separadamente depoimentos, palavras-chave, ECH, IC e dados dos respondentes.
+
+**Meu histórico de DSCs**, também disponível no painel, guarda os estudos e
+versões por usuário. É possível reformular com um novo comando e baixar o
+relatório PDF de uma versão anterior. Execute `npx sequelize-cli db:migrate`
+antes de iniciar esta versão: o novo histórico utiliza a tabela `PesquisasDSC`.
+
+As fontes, decisões metodológicas e limites estão em
+[Metodologia e decisões do fluxo DSC](docs/metodologia-dsc.md).
+
 ---
 
 ## 🔐 Variáveis de ambiente

@@ -11,6 +11,7 @@ import Favorito from "../../models/Favorito.js";
 import Analise from "../../models/Analise.js";
 import { logarUsuario } from "../../controllers/AuthController.js";
 import bcrypt from "bcrypt";
+import { BASE_PATH } from "../../config/basePath.js";
 
 // Recria todas as tabelas antes de cada teste → isolamento total
 beforeEach(async () => {
@@ -132,7 +133,7 @@ describe("logarUsuario (fluxo completo: controller + bcrypt + banco real)", () =
 
     await logarUsuario(req, res);
 
-    expect(res.redirect).toHaveBeenCalledWith("/dashboard");
+    expect(res.redirect).toHaveBeenCalledWith(BASE_PATH + "/dashboard");
     expect(req.session.usuario).toBeDefined();
   });
 
