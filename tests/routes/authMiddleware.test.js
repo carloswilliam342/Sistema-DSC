@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { checkAuth, verificarPermissao } from "../../routes/auth.js";
 import { criarReq, criarRes } from "../helpers/mockReqRes.js";
+import { BASE_PATH } from "../../config/basePath.js";
 
 describe("checkAuth", () => {
   it("redireciona para /login quando não há usuário na sessão", () => {
@@ -8,7 +9,7 @@ describe("checkAuth", () => {
     const res = criarRes();
     const next = vi.fn();
     checkAuth(req, res, next);
-    expect(res.redirect).toHaveBeenCalledWith("/login");
+    expect(res.redirect).toHaveBeenCalledWith(BASE_PATH + "/login");
     expect(next).not.toHaveBeenCalled();
   });
 

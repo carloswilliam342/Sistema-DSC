@@ -11,12 +11,13 @@ function esperar(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export default async function ClientGemini(prompt) {
+export default async function ClientGemini(prompt, config) {
   for (let tentativa = 1; tentativa <= MAX_TENTATIVAS; tentativa++) {
     try {
       const response = await ai.models.generateContent({
         model: "gemini-2.5-flash",
         contents: prompt,
+        ...(config ? { config } : {}),
       });
       return response.text;
     } catch (error) {

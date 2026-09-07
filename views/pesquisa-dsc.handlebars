@@ -1,0 +1,34 @@
+<link rel="stylesheet" href="{{@root.basePath}}/css/pesquisa-dsc.css">
+<main id="dsc-app" class="dsc-app container py-4" data-base="{{@root.basePath}}" data-history="{{historico}}">
+  <header class="dsc-header">
+    <div><a href="{{@root.basePath}}/dashboard">← Painel</a><p class="dsc-eyebrow">DSC · Espaço do pesquisador</p><h1>Discurso do Sujeito Coletivo</h1><p>Organize as falas, revise os sentidos e construa um DSC por categoria.</p></div>
+    <nav aria-label="Pesquisas"><button type="button" id="novo-estudo" class="btn btn-outline-primary">Novo estudo</button> <button type="button" id="abrir-historico" class="btn btn-primary">Meu histórico</button></nav>
+  </header>
+  <div id="dsc-status" role="status" aria-live="polite" tabindex="-1"></div>
+  <section id="historico-painel" hidden><h2>Meu histórico de DSCs</h2><p>Estudos, análises para revisão e todas as versões geradas na sua conta.</p><div id="historico-lista"></div><div id="historico-paginacao" class="dsc-actions"></div></section>
+  <div id="estudo-painel">
+    <ol id="etapas" class="dsc-steps" aria-label="Etapas do estudo"><li>Categorias</li><li>Respondentes</li><li>Depoimentos</li><li>Revisão</li><li>Resultados</li></ol>
+    <form id="estudo-form">
+      <section data-step="0" class="dsc-panel"><h2>1. Defina as categorias</h2><p>Use categorias que representem sentidos e posicionamentos. Informe a mesma pergunta para todos os depoimentos deste estudo.</p>
+        <label class="dsc-field">Título do estudo<input id="titulo-estudo" class="form-control" maxlength="200" required placeholder="Ex.: Acesso aos serviços de saúde"></label>
+        <label class="dsc-field">Pergunta da entrevista<textarea id="pergunta-estudo" class="form-control" maxlength="2000" required rows="2"></textarea></label>
+        <div id="categorias-editor"></div><button type="button" id="adicionar-categoria" class="btn btn-outline-secondary">+ Adicionar categoria</button>
+      </section>
+      <section data-step="1" class="dsc-panel" hidden><h2>2. Cadastre os respondentes</h2><p>Informe um nome ou pseudônimo para cada pessoa. Dados não coletados podem ficar em branco; aparecerão como “Não informado”.</p><div id="respondentes-editor"></div><button type="button" id="adicionar-respondente" class="btn btn-outline-secondary">+ Adicionar respondente</button></section>
+      <section data-step="2" class="dsc-panel" hidden><h2>3. Insira os depoimentos</h2><p>Transcreva a resposta de cada pessoa à pergunta do estudo. Você pode importar um TXT, DOCX ou PDF por respondente (até 5 MB).</p><p id="pergunta-resumo" class="dsc-note"></p><div id="depoimentos-editor"></div></section>
+      <div id="entrada-acoes" class="dsc-actions"><button type="button" id="voltar-etapa" class="btn btn-outline-secondary" hidden>Voltar</button><button type="submit" id="avancar-etapa" class="btn btn-primary">Continuar</button></div>
+    </form>
+    <section data-step="3" class="dsc-panel" hidden><h2>4. Revise a análise</h2><p>Confira as citações e ideias centrais. Mude a categoria de cada expressão-chave quando necessário. Uma pessoa pode contribuir para mais de uma categoria.</p>
+      <p class="dsc-note">Os DSCs terão uma única frase de até 10 palavras. Categorias sem evidências ou com sentidos incompatíveis podem exigir revisão.</p>
+      <div id="revisao-editor"></div>
+      <label class="dsc-field">Comando para a redação (opcional)<textarea id="comando-geracao" class="form-control" rows="2" maxlength="1000" placeholder="Ex.: Preserve a referência à dificuldade de transporte."></textarea></label>
+      <label class="dsc-check"><input type="checkbox" id="confirmar-revisao"> Revisei as expressões-chave, ideias centrais e categorias desta análise.</label>
+      <div class="dsc-actions"><button type="button" id="editar-entradas" class="btn btn-outline-secondary">Rever dados e categorias</button><button type="button" id="gerar-dsc" class="btn btn-primary">Gerar DSCs</button></div>
+    </section>
+    <section data-step="4" class="dsc-panel" hidden><div class="dsc-header"><div><h2 id="resultado-titulo">Resultados</h2><p id="resultado-contexto"></p></div><a id="exportar-pdf" class="btn btn-outline-primary">Baixar relatório PDF</a></div>
+      <div class="dsc-filters"><label>Versão<select id="filtro-versao" class="form-select"></select></label><label>Mostrar<select id="filtro-conteudo" class="form-select"><option value="dsc">DSCs por categoria</option><option value="depoimento">Depoimentos — DP</option><option value="palavrasChave">Palavras-chave</option><option value="expressao">Expressões-chave — ECH</option><option value="ideiaCentral">Ideias centrais — IC</option><option value="ancoragem">Ancoragens — AC</option><option value="nome">Nomes dos respondentes</option><option value="sexo">Sexo</option><option value="idade">Idade</option><option value="cor">Cor/raça</option><option value="escolaridade">Grau de instrução</option><option value="regiao">Região</option><option value="cidade">Cidade</option><option value="estado">Estado</option><option value="ocupacao">Ocupação</option><option value="renda">Renda</option><option value="outros">Outros dados</option></select></label><label>Categoria<select id="filtro-categoria" class="form-select"></select></label><label>Respondente<select id="filtro-respondente" class="form-select"></select></label></div>
+      <div id="resultado-conteudo"></div><div class="dsc-actions"><button type="button" id="redefinir-dsc" class="btn btn-primary">Revisar / gerar nova versão</button><button type="button" id="ver-sugestao" class="btn btn-outline-secondary">Consultar sugestão original da IA</button></div><div id="sugestao-original" hidden></div>
+    </section>
+  </div>
+</main>
+<script src="{{@root.basePath}}/js/pesquisa-dsc.js" defer></script>
