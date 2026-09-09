@@ -11,7 +11,7 @@ services:
       SESSION_SECRET: ${SESSION_SECRET}
       BASE_PATH: ${BASE_PATH:-}
     volumes:
-      - ./uploads:/app/uploads
+      - dsc:/app/uploads
     depends_on:
       migrate:
         condition: service_completed_successfully
@@ -34,3 +34,6 @@ services:
       DB_PASSWORD: ${DB_MIGRATE_PASSWORD:-${DB_PASSWORD:-root}}
       DB_NAME: ${DB_NAME:-dsc_ifma}
     restart: "no"
+
+volumes:
+  dsc:
