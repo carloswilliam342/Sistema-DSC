@@ -21,10 +21,10 @@ const fileFilter = (req, file, cb) => {
 
 // Rota para renderizar a página de criar discurso
 router.get("/", checkAuth, (req, res) => {
-    res.render("pesquisa-dsc");
+    res.render("pesquisa-dsc", { cacheBust: Date.now() });
 });
 
-router.get("/historico", checkAuth, (req, res) => res.render("pesquisa-dsc", { historico: true }));
+router.get("/historico", checkAuth, (req, res) => res.render("pesquisa-dsc", { historico: true, cacheBust: Date.now() }));
 router.get("/api/pesquisas", checkAuth, listarPesquisas);
 router.get("/api/pesquisas/:id", checkAuth, obterPesquisa);
 router.get("/api/pesquisas/:id/pdf", checkAuth, exportarPesquisa);

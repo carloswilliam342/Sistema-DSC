@@ -51,6 +51,14 @@ export const registrarUsuario = async (req, res) => {
       }
 
       const { nome, email, senha, tipoUsuario } = req.body; // Captura o tipo de usuário
+
+      // Whitelist de tipos permitidos no registro público para evitar auto-escalação de privilégio
+      const tiposPermitidosRegistro = ['pesquisador', 'usuario'];
+      if (!tiposPermitidosRegistro.includes(tipoUsuario)) {
+        req.flash("error_msg", "Tipo de usuário inválido para registro.");
+        return res.redirect(BASE_PATH + "/registro");
+      }
+
       const imagemPath = req.file ? `/uploads/profile-images/${req.file.filename}` : null;
 
       // Verifica se a senha atende aos requisitos:
@@ -108,7 +116,15 @@ export const registrarUsuario = async (req, res) => {
             return res.render('login');
         }
 
-        req.session.usuario = usuario; // Armazena o usuário na sessão
+        // Armazena apenas dados não sensíveis na sessão (exclui hash da senha)
+    req.session.usuario = {
+      id: usuario.id,
+      nome: usuario.nome,
+      email: usuario.email,
+      tipoUsuario: usuario.tipoUsuario,
+      imagemPerfil: usuario.imagemPerfil,
+      primeiroLogin: usuario.primeiroLogin
+    };
         req.flash('success_msg', 'Login realizado com sucesso!');
 
         if (usuario.primeiroLogin) {
