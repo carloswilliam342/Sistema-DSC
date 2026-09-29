@@ -109,7 +109,7 @@ describe("registrarUsuario", () => {
     User.findOne.mockResolvedValue(null);
     bcrypt.hash.mockResolvedValue("hash_da_senha");
     User.create.mockResolvedValue({ id: 1 });
-    const req = criarReq({ nome: "Ana", email: "a@a.com", senha: "Senha@123", tipoUsuario: "PESQUISADOR" });
+    const req = criarReq({ nome: "Ana", email: "a@a.com", senha: "Senha@123", tipoUsuario: "pesquisador" });
     const res = criarRes();
 
     await registrarUsuario(req, res);

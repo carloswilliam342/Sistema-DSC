@@ -9,18 +9,128 @@
   let respondents = [{ nome: "", depoimento: "" }];
   let review = null;
   const clone = value => JSON.parse(JSON.stringify(value));
-  const demographics = { nome: "Nome ou pseudônimo *", idade: "Idade", sexo: "Sexo", cor: "Cor/raça", renda: "Renda", escolaridade: "Grau de instrução", cidade: "Cidade", estado: "Estado", regiao: "Região", ocupacao: "Principal atividade profissional", outros: "Outros dados" };
+  // Mapeamento de UF para região
+  const ufToRegiao = {
+    AC: "Norte", AM: "Norte", AP: "Norte", PA: "Norte", RO: "Norte", RR: "Norte", TO: "Norte",
+    AL: "Nordeste", BA: "Nordeste", CE: "Nordeste", MA: "Nordeste", PB: "Nordeste", PE: "Nordeste", PI: "Nordeste", RN: "Nordeste", SE: "Nordeste",
+    DF: "Centro-Oeste", GO: "Centro-Oeste", MS: "Centro-Oeste", MT: "Centro-Oeste",
+    ES: "Sudeste", MG: "Sudeste", RJ: "Sudeste", SP: "Sudeste",
+    PR: "Sul", RS: "Sul", SC: "Sul"
+  };
+  const ufsOrdenadas = ["AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"];
+  const cidadesCache = {};
+  const demographics = { nome: "Nome ou pseudônimo *", idade: "Idade", sexo: "Sexo", cor: "Cor/raça", renda: "Renda", escolaridade: "Grau de instrução", estado: "Estado", cidade: "Cidade", regiao: "Região", ocupacao: "Principal atividade profissional", outros: "Outros dados" };
+  const selectOptions = {
+    sexo: ["Masculino", "Feminino", "Outro", "Prefiro não informar"],
+    cor: ["Branca", "Preta", "Parda", "Amarela", "Indígena", "Prefiro não informar"],
+    renda: ["Até 1 salário mínimo", "1 a 2 salários mínimos", "2 a 3 salários mínimos", "3 a 5 salários mínimos", "5 a 10 salários mínimos", "Mais de 10 salários mínimos", "Prefiro não informar"],
+    escolaridade: ["Sem escolaridade", "Fundamental incompleto", "Fundamental completo", "Médio incompleto", "Médio completo", "Superior incompleto", "Superior completo", "Pós-graduação", "Prefiro não informar"]
+  };
+  async function fetchCidades(uf) {
+    if (cidadesCache[uf]) return cidadesCache[uf];
+    try {
+      const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`);
+      if (!response.ok) throw new Error("Falha ao buscar cidades");
+      const data = await response.json();
+      const cidades = data.map(m => m.nome).sort((a, b) => a.localeCompare(b, "pt-BR"));
+      cidadesCache[uf] = cidades;
+      return cidades;
+    } catch (error) {
+      console.error("Erro ao buscar cidades:", error);
+      return [];
+    }
+  }
   function el(tag, text, className) { const node = document.createElement(tag); if (text != null) node.textContent = text; if (className) node.className = className; return node; }
-  function button(text, action, style = "btn btn-outline-secondary") { const b = el("button", text, style); b.type = "button"; b.addEventListener("click", action); return b; }
-  function field(label, value, onInput, { multiline = false, required = false, max = 200, type = "text" } = {}) {
-    const wrap = el("label", label, "dsc-field");
-    const input = el(multiline ? "textarea" : "input", null, "form-control");
-    if (!multiline) input.type = type;
-    input.value = value || ""; input.required = required; input.maxLength = max;
-    if (type === "number") { input.min = "0"; input.max = "130"; input.step = "1"; }
-    input.addEventListener("input", () => onInput(input.value)); wrap.append(input); return wrap;
+  function button(text, action, style = "btn btn-outline-secondary", loadingText = null) {
+    const b = el("button", null, style);
+    b.type = "button";
+    const span = el("span", text);
+    const spinner = el("span", null, "spinner-border spinner-border-sm d-none");
+    spinner.setAttribute("role", "status");
+    spinner.setAttribute("aria-hidden", "true");
+    b.append(spinner, span);
+    b.addEventListener("click", async () => {
+      if (loadingText && !b.disabled) {
+        spinner.classList.remove("d-none");
+        span.textContent = loadingText;
+        b.disabled = true;
+        try { await action(); } finally { spinner.classList.add("d-none"); span.textContent = text; b.disabled = false; }
+      } else { action(); }
+    });
+    return b;
   }
   function option(select, value, text) { const o = el("option", text); o.value = value; select.append(o); }
+  function fieldLocation(label, key, value, onInput, respondentIndex) {
+    const wrap = el("label", label, "dsc-field");
+    const r = respondents[respondentIndex];
+    if (key === "estado") {
+      const select = el("select", null, "form-select");
+      option(select, "", "Selecione o estado...");
+      ufsOrdenadas.forEach(uf => option(select, uf, uf));
+      select.value = value || "";
+      select.addEventListener("change", async () => {
+        const uf = select.value;
+        onInput(uf);
+        r.regiao = ufToRegiao[uf] || "";
+        r.cidade = "";
+        r._cidadesDisponiveis = [];
+        if (uf) {
+          const cidades = await fetchCidades(uf);
+          r._cidadesDisponiveis = cidades;
+        }
+        renderRespondents();
+      });
+      wrap.append(select);
+    } else if (key === "cidade") {
+      const cidades = r._cidadesDisponiveis || [];
+      if (cidades.length > 0) {
+        const select = el("select", null, "form-select");
+        option(select, "", "Selecione a cidade...");
+        cidades.forEach(c => option(select, c, c));
+        select.value = value || "";
+        select.addEventListener("change", () => onInput(select.value));
+        wrap.append(select);
+      } else {
+        const input = el("input", null, "form-control");
+        input.type = "text";
+        input.value = value || "";
+        input.placeholder = r.estado ? "Carregando cidades..." : "Selecione o estado primeiro";
+        input.disabled = !r.estado;
+        input.addEventListener("input", () => onInput(input.value));
+        wrap.append(input);
+      }
+    } else if (key === "regiao") {
+      const input = el("input", null, "form-control");
+      input.type = "text";
+      input.value = value || "";
+      input.readOnly = true;
+      input.placeholder = "Preenchido automaticamente";
+      wrap.append(input);
+    }
+    return wrap;
+  }
+  function field(label, value, onInput, { multiline = false, required = false, max = 200, type = "text", options = null, key = null, respondentIndex = null } = {}) {
+    if (key && ["estado", "cidade", "regiao"].includes(key) && respondentIndex !== null) {
+      return fieldLocation(label, key, value, onInput, respondentIndex);
+    }
+    const wrap = el("label", label, "dsc-field");
+    if (options) {
+      const select = el("select", null, "form-select");
+      option(select, "", "Selecione...");
+      options.forEach(opt => option(select, opt, opt));
+      select.value = value || "";
+      select.required = required;
+      select.addEventListener("change", () => onInput(select.value));
+      wrap.append(select);
+    } else {
+      const input = el(multiline ? "textarea" : "input", null, "form-control");
+      if (!multiline) input.type = type;
+      input.value = value || ""; input.required = required; input.maxLength = max;
+      if (type === "number") { input.min = "0"; input.max = "130"; input.step = "1"; }
+      input.addEventListener("input", () => onInput(input.value)); wrap.append(input);
+    }
+    return wrap;
+  }
   function status(message = "", error = false) { const n = $("dsc-status"); n.textContent = message; n.className = message ? `dsc-status${error ? " dsc-error" : ""}` : ""; }
   async function api(path, body, isFile = false) {
     const response = await fetch(`${base}/criar-discurso/api${path}`, { method: body === undefined ? "GET" : "POST", credentials: "same-origin", headers: body === undefined || isFile ? {} : { "Content-Type": "application/json" }, body: body === undefined ? undefined : isFile ? body : JSON.stringify(body) });
@@ -44,9 +154,26 @@
     root.querySelectorAll("[data-step]").forEach(n => { n.hidden = Number(n.dataset.step) !== step; });
     [...$("etapas").children].forEach((n, i) => { if (i === step) n.setAttribute("aria-current", "step"); else n.removeAttribute("aria-current"); });
     $("estudo-form").hidden = step > 2;
-    // Campos de etapas anteriores continuam preservados, mas não bloqueiam a validação nativa.
-    root.querySelectorAll("#estudo-form [data-step] input, #estudo-form [data-step] textarea").forEach(n => { n.disabled = Number(n.closest("[data-step]").dataset.step) !== step; });
-    $("voltar-etapa").hidden = step === 0; $("avancar-etapa").textContent = step === 2 ? "Analisar depoimentos" : "Continuar";
+    // Campos de etapas inativas são desabilitados e têm required removido para não bloquear a validação nativa.
+    root.querySelectorAll("#estudo-form [data-step] input, #estudo-form [data-step] textarea, #estudo-form [data-step] select").forEach(n => {
+      const isActive = Number(n.closest("[data-step]").dataset.step) === step;
+      n.disabled = !isActive;
+      if (!isActive) {
+        n.dataset.wasRequired = n.required ? "true" : "false";
+        n.required = false;
+      } else if (n.dataset.wasRequired === "true") {
+        n.required = true;
+      }
+    });
+    $("voltar-etapa").hidden = step === 0;
+    const avancarBtn = $("avancar-etapa");
+    if (step === 2) {
+      avancarBtn.querySelector("span:last-child").textContent = "Analisar depoimentos";
+      avancarBtn.dataset.loadingText = "Analisando...";
+    } else {
+      avancarBtn.querySelector("span:last-child").textContent = "Continuar";
+      avancarBtn.dataset.loadingText = "";
+    }
   }
   function renderCategories() {
     const holder = $("categorias-editor"); holder.replaceChildren();
@@ -62,7 +189,16 @@
     const holder = $("respondentes-editor"); holder.replaceChildren();
     respondents.forEach((r, i) => {
       const card = el("div", null, "dsc-card"); card.append(el("h3", `Respondente ${i + 1}`)); const grid = el("div", null, "dsc-grid");
-      for (const [key, label] of Object.entries(demographics)) grid.append(field(label, r[key], v => { r[key] = v; }, { required: key === "nome", type: key === "idade" ? "number" : "text", max: key === "outros" ? 1000 : 200 }));
+      for (const [key, label] of Object.entries(demographics)) {
+        grid.append(field(label, r[key], v => { r[key] = v; }, {
+          required: key === "nome",
+          type: key === "idade" ? "number" : "text",
+          max: key === "outros" ? 1000 : 200,
+          options: selectOptions[key] || null,
+          key: key,
+          respondentIndex: i
+        }));
+      }
       card.append(grid);
       if (respondents.length > 1) card.append(button("Remover respondente", () => { if (r.depoimento && !window.confirm("Remover este respondente e seu depoimento do formulário?")) return; respondents.splice(i, 1); renderRespondents(); }));
       holder.append(card);
@@ -156,11 +292,44 @@
     event.preventDefault(); if (busy) return;
     if (step === 0) { const names = categories.map(c => c.nome.trim().toLocaleLowerCase("pt-BR")); if (names.some(n => !n) || new Set(names).size !== names.length) return status("Informe categorias com nomes diferentes.", true); status(); renderRespondents(); showStep(1); }
     else if (step === 1) { renderStatements(); showStep(2); }
-    else run("Analisando expressões-chave, ideias centrais e categorias…", async () => { study = await api("/pesquisas", { titulo: $("titulo-estudo").value, pergunta: $("pergunta-estudo").value, categorias: categories, respondentes: respondents }); review = clone(study.analise); $("comando-geracao").value = ""; renderReview(); showStep(3); });
+    else run("Analisando expressões-chave, ideias centrais e categorias…", async () => {
+      const btn = $("avancar-etapa");
+      const spinner = btn.querySelector(".spinner-border");
+      const textSpan = btn.querySelector("span:last-child");
+      const originalText = textSpan.textContent;
+      spinner.classList.remove("d-none");
+      textSpan.textContent = "Analisando...";
+      try {
+        study = await api("/pesquisas", { titulo: $("titulo-estudo").value, pergunta: $("pergunta-estudo").value, categorias: categories, respondentes: respondents });
+        review = clone(study.analise);
+        $("comando-geracao").value = "";
+        renderReview();
+        showStep(3);
+      } finally {
+        spinner.classList.add("d-none");
+        textSpan.textContent = originalText;
+      }
+    });
   };
   $("gerar-dsc").onclick = () => {
     if (!$("confirmar-revisao").checked) return status("Confirme a revisão antes de gerar os DSCs.", true);
-    run("Gerando e validando um DSC de até 10 palavras por categoria…", async () => { study = await api(`/pesquisas/${study.id}/gerar`, { revisao: study.revisao, analise: review, revisado: true, comando: $("comando-geracao").value }); review = clone(study.analise); renderResults(true); showStep(4); });
+    run("Gerando e validando um DSC de até 10 palavras por categoria…", async () => {
+      const btn = $("gerar-dsc");
+      const spinner = btn.querySelector(".spinner-border");
+      const textSpan = btn.querySelector("span:last-child");
+      const originalText = textSpan.textContent;
+      spinner.classList.remove("d-none");
+      textSpan.textContent = "Gerando...";
+      try {
+        study = await api(`/pesquisas/${study.id}/gerar`, { revisao: study.revisao, analise: review, revisado: true, comando: $("comando-geracao").value });
+        review = clone(study.analise);
+        renderResults(true);
+        showStep(4);
+      } finally {
+        spinner.classList.add("d-none");
+        textSpan.textContent = originalText;
+      }
+    });
   };
   $("editar-entradas").onclick = () => { $("titulo-estudo").value = study.dados.titulo; $("pergunta-estudo").value = study.dados.pergunta; categories = clone(study.dados.categorias); respondents = clone(study.dados.respondentes); renderCategories(); renderRespondents(); renderStatements(); showStep(0); status("Ao analisar novamente, será criado outro estudo. O estudo anterior permanece no histórico."); };
   $("redefinir-dsc").onclick = () => { review = clone(study.analise); $("comando-geracao").value = ""; renderReview(); showStep(3); };

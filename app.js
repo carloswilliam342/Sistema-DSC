@@ -77,7 +77,12 @@ if (process.env.NODE_ENV !== "test") {
 app.use(
   session({
     store: sessionStore,
-    secret: process.env.SESSION_SECRET || "dev_secret_troque_em_producao",
+    secret: process.env.SESSION_SECRET || (() => {
+      if (process.env.NODE_ENV === 'production') {
+        throw new Error('SESSION_SECRET é obrigatório em produção. Defina a variável de ambiente.');
+      }
+      return "dev_secret_troque_em_producao";
+    })(),
     resave: false,
     saveUninitialized: false,
     cookie: {

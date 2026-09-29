@@ -231,24 +231,36 @@ if (!fs.existsSync(relatoriosDir)) {
     fs.mkdirSync(relatoriosDir, { recursive: true });
 }
 
+// Sanitiza nome de arquivo para prevenir path traversal
+function sanitizarNomeArquivo(raw) {
+    let filename;
+    try {
+        filename = decodeURIComponent(raw);
+    } catch (e) {
+        filename = raw;
+    }
+    // Remove qualquer componente de diretório (.., /, \)
+    return path.basename(filename);
+}
+
+// Verifica se o caminho resolvido está dentro do diretório permitido
+function estaDentroDoDiretorio(caminhoResolvido, diretorioBase) {
+    const normalizado = path.resolve(caminhoResolvido);
+    const baseNormalizada = path.resolve(diretorioBase);
+    return normalizado.startsWith(baseNormalizada + path.sep) || normalizado === baseNormalizada;
+}
+
 // função de download (converte .txt para PDF e envia)
 export const baixarDiscurso = (req, res) => {
     try {
-        // raw param pode vir codificado/decodificado dependendo do front
         const raw = req.params.filename || "";
-        console.log("baixarDiscurso called, raw param:", raw);
-
-        // decode uma vez para ter o nome original
-        let filename;
-        try {
-            filename = decodeURIComponent(raw);
-        } catch (e) {
-            filename = raw;
-        }
-        console.log("baixarDiscurso resolved filename:", filename);
-
+        const filename = sanitizarNomeArquivo(raw);
         const txtPath = path.resolve("uploads", "discursos-criados", filename);
-        console.log("checando arquivo em:", txtPath, "exists:", fs.existsSync(txtPath));
+
+        // Previne path traversal: garante que o arquivo está dentro do diretório esperado
+        if (!estaDentroDoDiretorio(txtPath, discursosCriadosDir)) {
+            return res.status(403).send("Acesso negado.");
+        }
 
         if (!fs.existsSync(txtPath)) {
             return res.status(404).send("Arquivo não encontrado.");
@@ -281,18 +293,23 @@ export const baixarDiscurso = (req, res) => {
 export const baixarRelatorio = async (req, res) => {
     try {        
         const rawParam = req.params.filename || "";
-        console.log("baixarRelatorio called, raw param:", rawParam);
 
         // Decodifica o parâmetro da URL
         const decodedParam = decodeURIComponent(rawParam);
 
         // Separa o nome do arquivo de relatório e o nome do arquivo de dados dos gráficos
-        const [filename, dadosGraficosFile] = decodedParam.split('&dados=');
+        const [rawFilename, dadosGraficosFile] = decodedParam.split('&dados=');
 
-        console.log("baixarRelatorio resolved filename:", filename);
+        // Sanitiza ambos os nomes para prevenir path traversal
+        const filename = sanitizarNomeArquivo(rawFilename);
+        const dadosSanitizado = dadosGraficosFile ? sanitizarNomeArquivo(dadosGraficosFile) : null;
 
         const txtPath = path.resolve("uploads", "relatorios", filename);
-        console.log("checando arquivo em:", txtPath, "exists:", fs.existsSync(txtPath));
+
+        // Previne path traversal: garante que o arquivo está dentro do diretório esperado
+        if (!estaDentroDoDiretorio(txtPath, relatoriosDir)) {
+            return res.status(403).send("Acesso negado.");
+        }
 
         if (!fs.existsSync(txtPath)) {
             return res.status(404).send("Arquivo não encontrado.");
