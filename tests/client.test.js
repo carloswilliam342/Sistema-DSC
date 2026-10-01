@@ -42,7 +42,11 @@ describe("ClientGemini (retry)", () => {
     mockGenerate.mockResolvedValue({ text: '{"discursos":[]}' });
     const config = { responseMimeType: "application/json", temperature: 0.2, httpOptions: { timeout: 60000 } };
     await ClientGemini("prompt", config);
-    expect(mockGenerate).toHaveBeenCalledWith({ model: "gemini-2.5-flash", contents: "prompt", config });
+    expect(mockGenerate).toHaveBeenCalledWith({
+      model: "gemini-3.5-flash",
+      contents: "prompt",
+      config: { ...config, thinkingConfig: { thinkingBudget: 0 } },
+    });
   });
 
   it("tenta novamente após erro 503 e retorna na segunda tentativa", async () => {

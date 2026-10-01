@@ -14,15 +14,36 @@ function esperar(ms) {
 export default async function ClientGemini(prompt, config) {
   for (let tentativa = 1; tentativa <= MAX_TENTATIVAS; tentativa++) {
     try {
-      const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash",
-        contents: prompt,
-        ...(config ? { config } : {}),
-      });
-      return response.text;
+      // Gemini 3.x emite console.warn sobre thoughtSignature (thinking interno).
+      // Suprimimos temporariamente para não poluir o log do servidor.
+      const warnOriginal = console.warn;
+      console.warn = (...args) => {
+        if (typeof args[0] === "string" && args[0].includes("thoughtSignature")) return;
+        warnOriginal.apply(console, args);
+      };
+      let response;
+      try {
+        response = await ai.models.generateContent({
+          model: "gemini-3.5-flash",
+          contents: prompt,
+          config: {
+            ...(config || {}),
+            thinkingConfig: { thinkingBudget: 0 },
+          },
+        });
+      } finally {
+        console.warn = warnOriginal;
+      }
+      // Sanitize response: remove leading/trailing whitespace and normalize newlines
+      // to prevent validation failures due to model formatting quirks.
+      return response.text?.trim().replace(/\r?\n/g, " ");
     } catch (error) {
-      // 503 (modelo sobrecarregado) e 429 (limite de requisições) costumam ser transitórios
-      const transitorio = error.status === 503 || error.status === 429;
+      // 429 sem billing: cota gratuita acabou → não adianta fazer retry
+      if (error.status === 429) {
+        throw new Error("Cota gratuita da IA esgotada. Configure billing ou aguarde o reset mensal.");
+      }
+      // 503 (modelo sobrecarregado) costuma ser transitório
+      const transitorio = error.status === 503;
       if (!transitorio || tentativa === MAX_TENTATIVAS) {
         throw error;
       }
