@@ -75,10 +75,12 @@ export function validateGeneration(raw, data, analysis) {
     const fontes = analysis.respondentes.flatMap(r => r.unidades.filter(u => u.categoriaId === c.id).map(u => ({ respondenteId: r.id, unidadeId: u.id })));
     if (!fontes.length) return { categoriaId: c.id, texto: null, pendencia: "Sem expressões-chave nesta categoria.", fontes, palavras: 0 };
     if (row.texto === null) return { categoriaId: c.id, texto: null, pendencia: text(row.pendencia, "Pendência", 1000), fontes, palavras: 0 };
-    const texto = text(row.texto, "DSC", 500);
+    // Normaliza quebras de linha e espaços extras dentro do texto (modelos 3.x
+    // podem inserir \n no JSON mesmo com responseMimeType: application/json).
+    const texto = text(row.texto, "DSC", 500).replace(/[\r\n]+/g, " ").replace(/\s+/g, " ").trim();
     const palavras = countWords(texto);
     if (palavras < 1 || palavras > 10) fail("O DSC inteiro deve ter no máximo 10 palavras.");
-    if (/[.!?…]\s*\S/u.test(texto) || /[\r\n]/u.test(texto)) fail("O DSC deve conter apenas uma frase.");
+    if (/[.!?…]\s*\S/u.test(texto)) fail("O DSC deve conter apenas uma frase.");
     return { categoriaId: c.id, texto, pendencia: null, fontes, palavras };
   });
 }
